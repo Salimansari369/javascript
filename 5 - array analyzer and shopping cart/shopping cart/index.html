@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Shopping Cart Calculator</title>
+
+    <style>
+        body {
+            font-family: Arial;
+            background: #f2f2f2;
+            margin: 0;
+            padding: 0;
+        }
+
+        .container {
+            width: 800px;
+            margin: 30px auto;
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px gray;
+        }
+
+        h2 {
+            text-align: center;
+        }
+
+        input {
+            padding: 8px;
+            width: 150px;
+            margin: 5px;
+        }
+
+        button {
+            padding: 10px;
+            cursor: pointer;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        table, th, td {
+            border: 1px solid black;
+        }
+
+        th {
+            background: #007bff;
+            color: white;
+        }
+
+        th, td {
+            padding: 10px;
+            text-align: center;
+        }
+
+        .result {
+            margin-top: 20px;
+            font-size: 18px;
+        }
+
+        footer {
+            margin-top: 30px;
+            padding: 15px;
+            text-align: center;
+            background: #007bff;
+            color: white;
+            border-radius: 5px;
+            font-size: 15px;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="container">
+
+        <h2>Shopping Cart Calculator</h2>
+
+        <input type="text" id="name" placeholder="Product Name">
+
+        <input type="number" id="price" placeholder="Price">
+
+        <input type="number" id="qty" placeholder="Quantity">
+
+        <button onclick="addProduct()">Add Product</button>
+
+        <table id="cartTable">
+            <tr>
+                <th>ID</th>
+                <th>Product</th>
+                <th>Price</th>
+                <th>Quantity</th>
+                <th>Total</th>
+            </tr>
+        </table>
+
+        <div class="result" id="result">
+
+            <h3>Item Summary</h3>
+            <ul id="summary"></ul>
+
+            <h3>Expensive Products (Price > 1000)</h3>
+            <ul id="expensive"></ul>
+
+        </div>
+
+        <footer>
+            Developed by Salim Ansari | PRN - 24070521005
+        </footer>
+
+    </div>
+
+    <script>
+
+        let cart = [];
+
+        function addProduct() {
+
+            let name = document.getElementById("name").value;
+
+            let price = parseFloat(
+                document.getElementById("price").value
+            );
+
+            let qty = parseInt(
+                document.getElementById("qty").value
+            );
+
+            if (name == "" || isNaN(price) || isNaN(qty)) {
+
+                alert("Please enter all fields");
+
+                return;
+            }
+
+            let product = {
+
+                id: cart.length + 1,
+
+                name: name,
+
+                price: price,
+
+                quantity: qty
+            };
+
+            cart.push(product);
+
+            displayCart();
+
+            document.getElementById("name").value = "";
+
+            document.getElementById("price").value = "";
+
+            document.getElementById("qty").value = "";
+        }
+
+        function displayCart() {
+
+            let table = document.getElementById("cartTable");
+
+            table.innerHTML = `
+                <tr>
+                    <th>ID</th>
+                    <th>Product</th>
+                    <th>Price</th>
+                    <th>Quantity</th>
+                    <th>Total</th>
+                </tr>
+            `;
+
+            cart.forEach(function(item) {
+
+                table.innerHTML += `
+                    <tr>
+                        <td>${item.id}</td>
+                        <td>${item.name}</td>
+                        <td>${item.price}</td>
+                        <td>${item.quantity}</td>
+                        <td>${item.price * item.quantity}</td>
+                    </tr>
+                `;
+
+            });
+
+
+            let total = cart.reduce(function(sum, item) {
+
+                return sum + (item.price * item.quantity);
+
+            }, 0);
+
+
+            let discount = 0;
+
+            if (total >= 50000) {
+
+                discount = total * 0.20;
+
+            }
+
+            else if (total >= 20000) {
+
+                discount = total * 0.10;
+
+            }
+
+            else if (total >= 5000) {
+
+                discount = total * 0.05;
+
+            }
+
+            let finalAmount = total - discount;
+
+
+            document.getElementById("result").innerHTML = `
+
+                <b>Total Amount :</b> ${total}<br>
+
+                <b>Discount :</b> ${discount.toFixed(2)}<br>
+
+                <b>Final Amount :</b> ${finalAmount.toFixed(2)}
+
+                <h3>Item Summary</h3>
+
+                <ul id="summary"></ul>
+
+                <h3>Expensive Products (Price > 1000)</h3>
+
+                <ul id="expensive"></ul>
+
+            `;
+
+            let summary = document.getElementById("summary");
+
+            summary.innerHTML = "";
+
+            cart.map(function(item) {
+
+                summary.innerHTML +=
+                    `<li>${item.name} : ${item.price * item.quantity}</li>`;
+
+            });
+
+
+            let expensive = document.getElementById("expensive");
+
+            expensive.innerHTML = "";
+
+            let exp = cart.filter(function(item) {
+
+                return item.price > 1000;
+
+            });
+
+            exp.forEach(function(item) {
+
+                expensive.innerHTML +=
+                    `<li>${item.name}</li>`;
+
+            });
+
+        }
+
+    </script>
+
+</body>
+
+</html>
