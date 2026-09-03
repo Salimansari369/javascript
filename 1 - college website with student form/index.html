@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>JavaScript Demo</title>
+        <!---Internal javascript-->
+        <script>
+            function showWelcome(){
+                let name = document.getElementById("name").value;
+                let age = document.getElementById("age").value;
+
+                document.getElementById("output").innerHTML =
+                 "<h2>Welcome, " + name + "!</h2>" +
+                 "<p>You are " + age + " years old.</p>";
+
+                console.log("User Name: " + name);
+                console.info("User Age: " + age);
+                console.warn("This is a warning message.");
+                console.error("This is an error message(demo purpose).")
+            }
+        </script>
+    </head>
+    <body>
+        <h1>User Information </h1>
+        <label> Enter Name: </label><br>
+        <input type="text" id="name" placeholder="Enter your name"><br><br>
+        <label> Enter Age: </label><br>
+        <input type="number" id="age" placeholder="Enter your age"><br><br>
+
+        <!---Inline JavaScript-->
+        <button onclick="showWelcome(); greet();">
+            Submit
+        </button>
+        <hr>
+        <div id="output"></div>
+        <!-- External JavaScript -->
+         <script src="script.js"></script>
+    </body>
+</html>
+ 

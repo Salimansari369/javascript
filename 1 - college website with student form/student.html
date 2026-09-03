@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Student Information | Symbiosis Institute of Technology, Nagpur</title>
+<link rel="stylesheet" href="style.css" />
+</head>
+<body onload="loadStudentInfo()">
+
+  <!-- Header -->
+  <header class="site-header">
+    <div class="header-inner">
+      <div class="logo-circle">SIT</div>
+      <div class="header-text">
+        <h1>Symbiosis Institute of Technology, Nagpur</h1>
+        <p>Department of Computer Science &amp; Engineering</p>
+      </div>
+    </div>
+  </header>
+
+  <!-- Navigation -->
+  <nav class="navbar">
+    <ul>
+      <li><a href="index.html">Home</a></li>
+      <li><a href="department.html">Department</a></li>
+      <li><a href="login.html">Student Login</a></li>
+      <li><a href="contact.html">Contact</a></li>
+    </ul>
+  </nav>
+
+  <!-- Page Title -->
+  <section class="page-title">
+    <h2>Student Information</h2>
+    <p>Your academic profile</p>
+  </section>
+
+  <!-- Main Content -->
+  <main class="container">
+    <section class="section">
+      <div class="student-card">
+        <div class="student-photo" id="stuPhotoInitial">S</div>
+        <div class="student-details">
+          <table>
+            <tbody>
+              <tr>
+                <th>Student Name</th>
+                <td id="stuName">-</td>
+              </tr>
+              <tr>
+                <th>Roll Number</th>
+                <td id="stuRoll">-</td>
+              </tr>
+              <tr>
+                <th>Student ID</th>
+                <td id="stuId">-</td>
+              </tr>
+              <tr>
+                <th>Gmail</th>
+                <td id="stuGmail">-</td>
+              </tr>
+              <tr>
+                <th>Department</th>
+                <td id="stuDept">-</td>
+              </tr>
+              <tr>
+                <th>Semester</th>
+                <td id="stuSemester">-</td>
+              </tr>
+              <tr>
+                <th>CGPA</th>
+                <td id="stuCgpa">-</td>
+              </tr>
+              <tr>
+                <th>Attendance</th>
+                <td id="stuAttendance">-</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <div class="btn-row">
+        <a href="index.html" class="btn">Home</a>
+        <button class="btn btn-secondary" onclick="logout()">Logout</button>
+      </div>
+    </section>
+  </main>
+
+  <!-- Footer -->
+  <footer class="site-footer">
+   <p>&copy; 2026 Symbiosis Institute of Technology, Nagpur. All Rights Reserved.</p>
+    <p>Vidya Nagari, Wathoda Road, Nagpur, Maharashtra, India</p>
+  </footer>
+
+  <script src="script.js"></script>
+</body>
+</html>
+ 
