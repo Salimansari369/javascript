@@ -1,0 +1,569 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Result Portal</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700;800&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --navy: #16233f;
+    --navy-deep: #0d1626;
+    --gold: #c9a227;
+    --gold-soft: #e6cf8c;
+    --paper: #f8f3e8;
+    --paper-line: #e3d8bd;
+    --ink: #2a2620;
+    --ink-soft: #6b6455;
+    --pass: #3f7a5c;
+    --fail: #b23a48;
+    --radius: 14px;
+  }
+
+  *{ box-sizing: border-box; }
+
+  body{
+    margin:0;
+    min-height:100vh;
+    font-family:'Inter', sans-serif;
+    color:var(--ink);
+    background:
+      radial-gradient(circle at 15% 10%, rgba(201,162,39,0.10), transparent 45%),
+      radial-gradient(circle at 85% 90%, rgba(201,162,39,0.08), transparent 45%),
+      linear-gradient(160deg, var(--navy-deep) 0%, var(--navy) 55%, #1c2c4d 100%);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    padding:32px 16px;
+  }
+
+  .wrap{
+    width:100%;
+    max-width:560px;
+  }
+
+  .letterhead{
+    text-align:center;
+    margin-bottom:18px;
+    color:var(--gold-soft);
+  }
+  .letterhead .seal{
+    width:46px; height:46px;
+    margin:0 auto 10px;
+    border-radius:50%;
+    border:2px solid var(--gold);
+    display:flex; align-items:center; justify-content:center;
+    font-family:'Playfair Display', serif;
+    font-weight:700;
+    font-size:15px;
+    color:var(--gold);
+    letter-spacing:0.5px;
+    background:radial-gradient(circle, rgba(201,162,39,0.12), transparent 70%);
+  }
+  .letterhead h1{
+    font-family:'Playfair Display', serif;
+    font-weight:800;
+    font-size:26px;
+    letter-spacing:0.5px;
+    margin:0 0 4px;
+    color:#f3ead0;
+  }
+  .letterhead p{
+    margin:0;
+    font-size:12.5px;
+    letter-spacing:2.5px;
+    text-transform:uppercase;
+    color:#9fb0cf;
+  }
+
+  .card{
+    background:var(--paper);
+    border-radius:var(--radius);
+    padding:38px 36px 32px;
+    box-shadow: 0 30px 60px -20px rgba(0,0,0,0.55), 0 0 0 1px rgba(201,162,39,0.25);
+    position:relative;
+    overflow:hidden;
+  }
+  .card::before{
+    content:"";
+    position:absolute; inset:10px;
+    border:1px solid var(--paper-line);
+    border-radius:8px;
+    pointer-events:none;
+  }
+
+  .step-title{
+    font-family:'Playfair Display', serif;
+    font-size:20px;
+    font-weight:700;
+    color:var(--navy);
+    margin:0 0 4px;
+  }
+  .step-sub{
+    font-size:13px;
+    color:var(--ink-soft);
+    margin:0 0 24px;
+    padding-bottom:16px;
+    border-bottom:1px dashed var(--paper-line);
+  }
+
+  .field{ margin-bottom:18px; }
+  .field label{
+    display:flex;
+    justify-content:space-between;
+    align-items:baseline;
+    font-size:12.5px;
+    font-weight:600;
+    text-transform:uppercase;
+    letter-spacing:1px;
+    color:var(--ink-soft);
+    margin-bottom:7px;
+  }
+  .field label .req{ color:var(--gold); text-transform:none; letter-spacing:0; font-weight:500; }
+
+  input[type="text"],
+  input[type="password"],
+  input[type="number"]{
+    width:100%;
+    padding:12px 14px;
+    font-family:'Inter', sans-serif;
+    font-size:15px;
+    color:var(--ink);
+    background:#fffdf8;
+    border:1.5px solid var(--paper-line);
+    border-radius:8px;
+    outline:none;
+    transition: border-color .15s ease, box-shadow .15s ease;
+  }
+  input:focus{
+    border-color: var(--navy);
+    box-shadow: 0 0 0 3px rgba(22,35,63,0.12);
+  }
+  input.invalid{ border-color: var(--fail); box-shadow: 0 0 0 3px rgba(178,58,72,0.12); }
+  input.valid{ border-color: var(--pass); }
+
+  .hint{
+    margin-top:7px;
+    font-size:11.5px;
+    color:var(--ink-soft);
+  }
+
+  .pw-rules{
+    list-style:none;
+    padding:0; margin:9px 0 0;
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:5px 10px;
+  }
+  .pw-rules li{
+    font-size:11.5px;
+    color:var(--ink-soft);
+    display:flex; align-items:center; gap:6px;
+  }
+  .pw-rules li .dot{
+    width:6px; height:6px; border-radius:50%;
+    background:#c9bfa1; flex:none;
+    transition: background .15s ease;
+  }
+  .pw-rules li.ok{ color:var(--pass); }
+  .pw-rules li.ok .dot{ background:var(--pass); }
+
+  .error-msg{
+    display:none;
+    margin-top:14px;
+    padding:10px 12px;
+    background:#fbe9e9;
+    border:1px solid rgba(178,58,72,0.35);
+    border-radius:8px;
+    color:var(--fail);
+    font-size:12.5px;
+    font-weight:600;
+  }
+  .error-msg.show{ display:block; }
+
+  .btn{
+    width:100%;
+    padding:13px 16px;
+    margin-top:6px;
+    border:none;
+    border-radius:8px;
+    font-family:'Inter', sans-serif;
+    font-size:14.5px;
+    font-weight:700;
+    letter-spacing:0.3px;
+    cursor:pointer;
+    background: linear-gradient(135deg, var(--navy) 0%, #24365c 100%);
+    color:#f3ead0;
+    transition: transform .12s ease, box-shadow .12s ease;
+  }
+  .btn:hover{ transform: translateY(-1px); box-shadow: 0 8px 18px -8px rgba(22,35,63,0.6); }
+  .btn:active{ transform: translateY(0); }
+  .btn.secondary{
+    background:transparent;
+    color:var(--navy);
+    border:1.5px solid var(--paper-line);
+    margin-top:10px;
+  }
+  .btn.secondary:hover{ box-shadow:none; border-color:var(--navy); }
+
+  .marks-grid{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:16px 14px;
+  }
+  @media (max-width:420px){ .marks-grid{ grid-template-columns:1fr; } }
+
+  .subj-label{
+    display:flex; justify-content:space-between; align-items:baseline;
+    margin-bottom:7px;
+  }
+  .subj-label span.name{
+    font-size:12.5px; font-weight:700; letter-spacing:1px; text-transform:uppercase; color:var(--navy);
+  }
+  .subj-label span.max{
+    font-size:11px; color:var(--ink-soft);
+  }
+
+  .step{ display:none; }
+  .step.active{ display:block; animation: fadeIn .35s ease; }
+  @keyframes fadeIn{ from{opacity:0; transform:translateY(6px);} to{opacity:1; transform:translateY(0);} }
+
+  /* Result step */
+  .result-head{ text-align:center; margin-bottom:22px; }
+  .stamp{
+    width:96px; height:96px;
+    margin:0 auto 14px;
+    border-radius:50%;
+    display:flex; align-items:center; justify-content:center;
+    flex-direction:column;
+    border:3px solid var(--pass);
+    color:var(--pass);
+    transform:rotate(-8deg);
+    font-family:'Playfair Display', serif;
+    font-weight:800;
+    letter-spacing:1px;
+    box-shadow: 0 0 0 3px rgba(63,122,92,0.12);
+    animation: stampIn .4s cubic-bezier(.34,1.56,.64,1);
+  }
+  .stamp.fail{ border-color:var(--fail); color:var(--fail); box-shadow:0 0 0 3px rgba(178,58,72,0.12); }
+  .stamp .big{ font-size:17px; }
+  .stamp .small{ font-size:9px; letter-spacing:2px; margin-top:2px; }
+  @keyframes stampIn{ from{ transform:rotate(-8deg) scale(0.4); opacity:0;} to{ transform:rotate(-8deg) scale(1); opacity:1;} }
+
+  .result-name{ font-family:'Playfair Display', serif; font-size:19px; font-weight:700; color:var(--navy); margin:0 0 2px; }
+  .result-prn{ font-size:12px; color:var(--ink-soft); font-family:'JetBrains Mono', monospace; letter-spacing:0.5px; }
+
+  table.marksheet{
+    width:100%;
+    border-collapse:collapse;
+    margin:18px 0 6px;
+    font-size:13.5px;
+  }
+  table.marksheet th{
+    text-align:left;
+    font-size:10.5px;
+    letter-spacing:1px;
+    text-transform:uppercase;
+    color:var(--ink-soft);
+    padding:8px 6px;
+    border-bottom:1.5px solid var(--navy);
+  }
+  table.marksheet td{
+    padding:9px 6px;
+    border-bottom:1px dashed var(--paper-line);
+    color:var(--ink);
+  }
+  table.marksheet td.grade{
+    font-family:'JetBrains Mono', monospace;
+    font-weight:700;
+    color:var(--navy);
+  }
+  table.marksheet tr:last-child td{ border-bottom:none; }
+
+  .summary{
+    margin-top:18px;
+    display:grid;
+    grid-template-columns:1fr 1fr 1fr;
+    gap:10px;
+  }
+  .summary .box{
+    background:#fffdf8;
+    border:1px solid var(--paper-line);
+    border-radius:8px;
+    padding:12px 10px;
+    text-align:center;
+  }
+  .summary .box .val{
+    font-family:'Playfair Display', serif;
+    font-size:19px;
+    font-weight:700;
+    color:var(--navy);
+  }
+  .summary .box .lab{
+    font-size:9.5px;
+    letter-spacing:1px;
+    text-transform:uppercase;
+    color:var(--ink-soft);
+    margin-top:3px;
+  }
+  .summary .box.result-box .val.pass{ color:var(--pass); }
+  .summary .box.result-box .val.fail{ color:var(--fail); }
+
+  .progress{
+    display:flex; gap:6px; margin-bottom:22px;
+  }
+  .progress .seg{
+    flex:1; height:3px; border-radius:2px; background:var(--paper-line);
+  }
+  .progress .seg.done{ background:var(--gold); }
+</style>
+</head>
+<body>
+
+<div class="wrap">
+  <div class="letterhead">
+    <div class="seal">SR</div>
+    <h1>Student Result Portal</h1>
+    <p>Academic Year 2025&ndash;26</p>
+  </div>
+
+  <div class="card">
+
+    <!-- STEP 1: Login / Details -->
+    <div class="step active" id="step1">
+      <div class="progress">
+        <div class="seg done"></div><div class="seg"></div><div class="seg"></div>
+      </div>
+      <h2 class="step-title">Student Verification</h2>
+      <p class="step-sub">Enter your details to access the marks entry section.</p>
+
+      <div class="field">
+        <label for="name">Full Name</label>
+        <input type="text" id="name" placeholder="e.g. Aditi Sharma" autocomplete="off">
+      </div>
+
+      <div class="field">
+        <label for="prn">PRN</label>
+        <input type="text" id="prn" placeholder="e.g. 22CS1045" autocomplete="off">
+      </div>
+
+      <div class="field">
+        <label for="password">Password <span class="req">min 8 characters</span></label>
+        <input type="password" id="password" placeholder="Enter a secure password" autocomplete="new-password">
+        <ul class="pw-rules" id="pwRules">
+          <li id="ruleLen"><span class="dot"></span>8+ characters</li>
+          <li id="ruleUpper"><span class="dot"></span>One uppercase letter</li>
+          <li id="ruleLower"><span class="dot"></span>One lowercase letter</li>
+          <li id="ruleNum"><span class="dot"></span>One number</li>
+          <li id="ruleSpecial"><span class="dot"></span>One special character</li>
+        </ul>
+      </div>
+
+      <div class="error-msg" id="step1Error">Please fix the highlighted fields before continuing.</div>
+
+      <button class="btn" onclick="goToMarks()">Next &rarr;</button>
+    </div>
+
+    <!-- STEP 2: Marks Entry -->
+    <div class="step" id="step2">
+      <div class="progress">
+        <div class="seg done"></div><div class="seg done"></div><div class="seg"></div>
+      </div>
+      <h2 class="step-title">Marks Entry</h2>
+      <p class="step-sub">Enter marks out of 100 for each subject.</p>
+
+      <div class="marks-grid">
+        <div class="field">
+          <div class="subj-label"><span class="name">DBMS</span><span class="max">/ 100</span></div>
+          <input type="number" id="dbms" min="0" max="100" placeholder="0">
+        </div>
+        <div class="field">
+          <div class="subj-label"><span class="name">JavaScript</span><span class="max">/ 100</span></div>
+          <input type="number" id="js" min="0" max="100" placeholder="0">
+        </div>
+        <div class="field">
+          <div class="subj-label"><span class="name">CN</span><span class="max">/ 100</span></div>
+          <input type="number" id="cn" min="0" max="100" placeholder="0">
+        </div>
+        <div class="field">
+          <div class="subj-label"><span class="name">CC</span><span class="max">/ 100</span></div>
+          <input type="number" id="cc" min="0" max="100" placeholder="0">
+        </div>
+        <div class="field">
+          <div class="subj-label"><span class="name">MES</span><span class="max">/ 100</span></div>
+          <input type="number" id="mes" min="0" max="100" placeholder="0">
+        </div>
+      </div>
+
+      <div class="error-msg" id="step2Error">Please enter valid marks (0&ndash;100) for every subject.</div>
+
+      <button class="btn" onclick="calculateResult()">Calculate Result &rarr;</button>
+      <button class="btn secondary" onclick="goToStep(1)">&larr; Back</button>
+    </div>
+
+    <!-- STEP 3: Result -->
+    <div class="step" id="step3">
+      <div class="progress">
+        <div class="seg done"></div><div class="seg done"></div><div class="seg done"></div>
+      </div>
+
+      <div class="result-head">
+        <div class="stamp" id="stamp">
+          <span class="big" id="stampText">PASS</span>
+          <span class="small">VERIFIED</span>
+        </div>
+        <p class="result-name" id="resName">&mdash;</p>
+        <p class="result-prn" id="resPrn">PRN: &mdash;</p>
+      </div>
+
+      <table class="marksheet">
+        <thead>
+          <tr><th>Subject</th><th>Marks</th><th>Grade</th></tr>
+        </thead>
+        <tbody id="marksBody"></tbody>
+      </table>
+
+      <div class="summary">
+        <div class="box"><div class="val" id="sumTotal">0</div><div class="lab">Total</div></div>
+        <div class="box"><div class="val" id="sumPct">0%</div><div class="lab">Percentage</div></div>
+        <div class="box result-box"><div class="val" id="sumResult">&mdash;</div><div class="lab">Result</div></div>
+      </div>
+
+      <button class="btn secondary" onclick="goToStep(2)" style="margin-top:22px;">&larr; Edit Marks</button>
+    </div>
+
+  </div>
+</div>
+
+<script>
+  const nameInput = document.getElementById('name');
+  const prnInput = document.getElementById('prn');
+  const pwInput = document.getElementById('password');
+
+  const rules = {
+    len:     s => s.length >= 8,
+    upper:   s => /[A-Z]/.test(s),
+    lower:   s => /[a-z]/.test(s),
+    num:     s => /[0-9]/.test(s),
+    special: s => /[^A-Za-z0-9]/.test(s)
+  };
+
+  function updatePasswordRules(){
+    const val = pwInput.value;
+    const map = { len:'ruleLen', upper:'ruleUpper', lower:'ruleLower', num:'ruleNum', special:'ruleSpecial' };
+    let allOk = true;
+    for(const key in rules){
+      const ok = rules[key](val);
+      document.getElementById(map[key]).classList.toggle('ok', ok);
+      if(!ok) allOk = false;
+    }
+    pwInput.classList.toggle('valid', allOk && val.length>0);
+    pwInput.classList.toggle('invalid', false);
+    return allOk;
+  }
+  pwInput.addEventListener('input', updatePasswordRules);
+
+  function markInvalid(el, invalid){
+    el.classList.toggle('invalid', invalid);
+    if(!invalid) el.classList.remove('valid') ;
+  }
+
+  function goToStep(n){
+    document.querySelectorAll('.step').forEach(s=>s.classList.remove('active'));
+    document.getElementById('step'+n).classList.add('active');
+  }
+
+  function goToMarks(){
+    const errBox = document.getElementById('step1Error');
+    let ok = true;
+
+    const nameOk = nameInput.value.trim().length > 0;
+    markInvalid(nameInput, !nameOk);
+    if(!nameOk) ok = false;
+
+    const prnOk = prnInput.value.trim().length > 0;
+    markInvalid(prnInput, !prnOk);
+    if(!prnOk) ok = false;
+
+    const pwOk = updatePasswordRules();
+    markInvalid(pwInput, !pwOk);
+    if(!pwOk) ok = false;
+
+    errBox.classList.toggle('show', !ok);
+    if(!ok) return;
+
+    errBox.classList.remove('show');
+    goToStep(2);
+  }
+
+  function gradeFor(marks){
+    if(marks >= 90) return 'O';
+    if(marks >= 80) return 'A+';
+    if(marks >= 70) return 'A';
+    if(marks >= 60) return 'B+';
+    if(marks >= 50) return 'B';
+    if(marks >= 40) return 'C';
+    return 'F';
+  }
+
+  function calculateResult(){
+    const subjects = [
+      { id:'dbms', label:'DBMS' },
+      { id:'js',   label:'JavaScript' },
+      { id:'cn',   label:'CN' },
+      { id:'cc',   label:'CC' },
+      { id:'mes',  label:'MES' }
+    ];
+
+    let ok = true;
+    const marksData = [];
+
+    subjects.forEach(sub=>{
+      const el = document.getElementById(sub.id);
+      const v = parseFloat(el.value);
+      const valid = !isNaN(v) && v >= 0 && v <= 100;
+      markInvalid(el, !valid);
+      if(!valid) ok = false;
+      marksData.push({ label: sub.label, marks: valid ? v : 0 });
+    });
+
+    const errBox = document.getElementById('step2Error');
+    errBox.classList.toggle('show', !ok);
+    if(!ok) return;
+    errBox.classList.remove('show');
+
+    let total = 0;
+    let failed = false;
+    const rows = marksData.map(m=>{
+      total += m.marks;
+      const g = gradeFor(m.marks);
+      if(g === 'F') failed = true;
+      return `<tr><td>${m.label}</td><td>${m.marks}</td><td class="grade">${g}</td></tr>`;
+    }).join('');
+
+    const percentage = (total / (subjects.length * 100) * 100).toFixed(2);
+    const passed = !failed && percentage >= 40;
+
+    document.getElementById('marksBody').innerHTML = rows;
+    document.getElementById('resName').textContent = nameInput.value.trim();
+    document.getElementById('resPrn').textContent = 'PRN: ' + prnInput.value.trim();
+    document.getElementById('sumTotal').textContent = total + ' / ' + (subjects.length*100);
+    document.getElementById('sumPct').textContent = percentage + '%';
+
+    const resultEl = document.getElementById('sumResult');
+    resultEl.textContent = passed ? 'PASS' : 'FAIL';
+    resultEl.classList.toggle('pass', passed);
+    resultEl.classList.toggle('fail', !passed);
+    const stamp = document.getElementById('stamp');
+    const stampText = document.getElementById('stampText');
+    stamp.classList.toggle('fail', !passed);
+    stampText.textContent = passed ? 'PASS' : 'FAIL';
+    stamp.style.animation = 'none';
+    void stamp.offsetWidth;
+    stamp.style.animation = null;
+    goToStep(3);
+  }
+</script>
+</body>
+</html>
