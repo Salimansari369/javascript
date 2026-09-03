@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Vehicle Registration Validator</title>
+<style>
+  :root {
+    --bg-dark: #0f172a;
+    --card-bg: #1e293b;
+    --accent: #38bdf8;
+    --accent-dark: #0ea5e9;
+    --success: #22c55e;
+    --error: #f87171;
+    --text-light: #e2e8f0;
+    --text-muted: #94a3b8;
+    --border: #334155;
+  }
+
+  * { box-sizing: border-box; }
+
+  body {
+    margin: 0;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+    font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+    color: var(--text-light);
+    padding: 20px;
+  }
+
+  .card {
+    background: var(--card-bg);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 36px 32px;
+    width: 100%;
+    max-width: 440px;
+    box-shadow: 0 20px 50px rgba(0,0,0,0.4);
+  }
+
+  .card h1 {
+    font-size: 22px;
+    margin: 0 0 4px;
+    text-align: center;
+    color: var(--text-light);
+  }
+
+  .card p.subtitle {
+    text-align: center;
+    color: var(--text-muted);
+    font-size: 13px;
+    margin: 0 0 24px;
+  }
+
+  label {
+    display: block;
+    font-size: 13px;
+    color: var(--text-muted);
+    margin-bottom: 8px;
+  }
+
+  .input-row {
+    display: flex;
+    gap: 10px;
+  }
+
+  input#regInput {
+    flex: 1;
+    padding: 12px 14px;
+    font-size: 16px;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    background: #0f172a;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    color: var(--text-light);
+    outline: none;
+    transition: border-color 0.2s, box-shadow 0.2s;
+  }
+
+  input#regInput::placeholder {
+    letter-spacing: normal;
+    text-transform: none;
+    color: #64748b;
+  }
+
+  input#regInput:focus {
+    border-color: var(--accent);
+    box-shadow: 0 0 0 3px rgba(56, 189, 248, 0.15);
+  }
+
+  button {
+    padding: 12px 20px;
+    font-size: 14px;
+    font-weight: 600;
+    background: linear-gradient(135deg, var(--accent) 0%, var(--accent-dark) 100%);
+    color: #0f172a;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: transform 0.1s, opacity 0.2s;
+  }
+
+  button:hover { opacity: 0.9; }
+  button:active { transform: scale(0.97); }
+
+  .format-hint {
+    margin-top: 12px;
+    font-size: 12px;
+    color: var(--text-muted);
+    line-height: 1.6;
+    background: rgba(56, 189, 248, 0.06);
+    border: 1px solid rgba(56, 189, 248, 0.2);
+    border-radius: 8px;
+    padding: 10px 12px;
+  }
+
+  .format-hint code {
+    color: var(--accent);
+    font-weight: 600;
+  }
+
+  #result {
+    margin-top: 20px;
+    padding: 14px 16px;
+    border-radius: 10px;
+    font-size: 14px;
+    line-height: 1.5;
+    display: none;
+    animation: fadeIn 0.25s ease;
+  }
+
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(-4px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  #result.show { display: block; }
+
+  #result.success {
+    background: rgba(34, 197, 94, 0.12);
+    border: 1px solid rgba(34, 197, 94, 0.4);
+    color: #86efac;
+  }
+
+  #result.error {
+    background: rgba(248, 113, 113, 0.12);
+    border: 1px solid rgba(248, 113, 113, 0.4);
+    color: #fca5a5;
+  }
+
+  #result strong {
+    display: block;
+    margin-bottom: 4px;
+    font-size: 14px;
+  }
+
+  .breakdown {
+    margin-top: 10px;
+    font-size: 12px;
+    color: var(--text-muted);
+  }
+
+  .breakdown span {
+    display: inline-block;
+    background: #0f172a;
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 3px 8px;
+    margin: 3px 4px 0 0;
+  }
+  .footer {
+    margin-top: 20px;
+    text-align: center;
+    color: #94a3b8;
+    font-size: 14px;
+}
+
+.footer strong {
+    color: #38bdf8;
+}
+
+.footer strong {
+    color: #38bdf8;
+}
+
+.footer strong {
+  color: #38bdf8;
+}
+</style>
+</head>
+<body>
+
+<div class="card">
+  <h1>🚗 Vehicle Registration Validator</h1>
+  <p class="subtitle">Validate a vehicle registration number format</p>
+
+  <label for="regInput">Enter Registration Number</label>
+  <div class="input-row">
+    <input type="text" id="regInput" placeholder="e.g. MH12AB1234" maxlength="10">
+    <button id="validateBtn">Validate</button>
+  </div>
+
+  <div class="format-hint">
+    Format: <code>SS DD SS DDDD</code> — 2 State letters, 2 District digits,
+    2 Series letters, 4 Vehicle digits (exactly 10 characters, e.g. <code>MH12AB1234</code>).
+  </div>
+
+  <div id="result"></div>
+</div>
+
+<footer class="footer">
+    Created by <strong>Salim Ansari/24070521005</strong>
+</footer>
+
+<script>
+  const regInput = document.getElementById('regInput');
+  const validateBtn = document.getElementById('validateBtn');
+  const resultBox = document.getElementById('result');
+
+  
+  class ValidationError extends Error {
+    constructor(message) {
+      super(message);
+      this.name = 'ValidationError';
+    }
+  }
+
+  function validateRegistrationNumber(regNo) {
+    if (regNo === null || regNo === undefined || regNo.trim() === '') {
+      throw new ValidationError('Registration number cannot be empty.');
+    }
+
+    const value = regNo.trim().toUpperCase();
+    if (value.length !== 10) {
+      throw new ValidationError(
+        `Registration number must be exactly 10 characters long (you entered ${value.length}).`
+      );
+    }
+    const stateCode = value.substring(0, 2);
+    const districtCode = value.substring(2, 4);
+    const series = value.substring(4, 6);
+    const vehicleNumber = value.substring(6, 10);
+
+    const alphaPattern = /^[A-Z]{2}$/;
+    const digitPattern2 = /^[0-9]{2}$/;
+    const digitPattern4 = /^[0-9]{4}$/;
+
+    if (!alphaPattern.test(stateCode)) {
+      throw new ValidationError(
+        `First 2 characters must be uppercase alphabets (State Code). Found "${stateCode}".`
+      );
+    }
+    if (!digitPattern2.test(districtCode)) {
+      throw new ValidationError(
+        `Characters 3-4 must be digits (District Code). Found "${districtCode}".`
+      );
+    }
+    if (!alphaPattern.test(series)) {
+      throw new ValidationError(
+        `Characters 5-6 must be uppercase alphabets (Series). Found "${series}".`
+      );
+    }
+    if (!digitPattern4.test(vehicleNumber)) {
+      throw new ValidationError(
+        `Last 4 characters must be digits (Vehicle Number). Found "${vehicleNumber}".`
+      );
+    }
+    return { value, stateCode, districtCode, series, vehicleNumber };
+  }
+  function showResult(type, html) {
+    resultBox.className = 'show ' + type;
+    resultBox.innerHTML = html;
+  }
+  function handleValidate() {
+    const rawValue = regInput.value;
+    try {
+      const parsed = validateRegistrationNumber(rawValue);
+
+      showResult('success', `
+        <strong>✅ Valid Registration Number</strong>
+        "${parsed.value}" follows the required format.
+        <div class="breakdown">
+          <span>State: ${parsed.stateCode}</span>
+          <span>District: ${parsed.districtCode}</span>
+          <span>Series: ${parsed.series}</span>
+          <span>Number: ${parsed.vehicleNumber}</span>
+        </div>
+      `);
+    } catch (err) {
+      if (err instanceof ValidationError) {
+        showResult('error', `<strong>❌ Invalid Registration Number</strong>${err.message}`);
+      } else {
+        
+        showResult('error', `<strong>⚠️ Unexpected Error</strong>${err.message}`);
+      }
+    }
+  }
+  validateBtn.addEventListener('click', handleValidate);
+  regInput.addEventListener('keyup', (e) => {
+    if (e.key === 'Enter') handleValidate();
+  });
+</script>
+</body>
+</html>
