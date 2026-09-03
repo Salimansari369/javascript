@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Student Grading System</title>
+        <link rel="stylesheet" href="style.css">
+    </head>
+
+    <body>
+    
+        <form>
+           
+    <img src="./sym logo.png"
+     alt="Logo"
+     style="position:absolute; top:20px; left:10px; width:100px; height:120;">
+            <div class="container">
+               
+<h2 class="logo">SYMBIOSIS INSTITUTE OF TECHNOLOGY</h2>
+
+<p class="sub">Student Grade Portal</p>
+
+<input type="text" id="name" placeholder="Student Name">
+
+<input type="text" id="prn" placeholder="PRN Number">
+
+<input type="number" id="marks" placeholder="Enter Marks">
+
+<button onclick="gradeSystem()">SUBMIT</button>
+
+<div id="result"></div>
+
+</div> 
+        </form>
+
+        <script>
+            function gradeSystem() {
+                var name = document.getElementById("name").value;
+                var marks = document.getElementById("marks").value;
+
+                if(name == "") {
+                    alert("Please enter student name: ");
+                    return;
+                }
+
+                if(marks == ""){
+                    alert("Please enter marks: ");
+                    return;
+                }
+                marks = Number(marks);
+
+                if(marks < 0 || marks > 100) {
+                    alert("Marks should be between 0 and 100.");
+                    return;
+                }
+
+                var grade;
+                var result; 
+
+                if(marks >= 90) {
+                    grade = "A+";
+                    result = "Pass";
+                } 
+                else if(marks >= 80) {
+                    grade = "A";
+                    result = "Pass";
+                } 
+                else if(marks >= 70) {
+                    grade = "B";
+                    result = "Pass";
+                }
+                else if(marks >= 60) {
+                    grade = "C";
+                    result = "Pass";
+                } 
+                else if(marks >= 50) {
+                    grade = "D";
+                    result = "Pass";
+                } 
+                else if(marks >= 40) {
+                    grade = "E";
+                    result = "Pass"; 
+                } else {
+                    grade = "F";
+                    result = "Fail"; 
+                } 
+                document.write("<h2>Student Grade Report</h2>"); 
+                document.write("<hr>"); 
+                document.write("<b>Student Name:</b> " + name + "<br> <br>"); 
+                document.write("<b>Marks:</b> " + marks + "<br> <br>");
+                document.write("<b>Grade:</b> " + grade + "<br> <br>"); 
+                document.write("<b>Result:</b> " + result); 
+            }
+        </script>
+    </body>
+</html>
