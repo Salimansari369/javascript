@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Text Toolkit</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{min-height:100vh;font-family:"Segoe UI",Arial,sans-serif;background:#0b1020;color:#fff;overflow-x:hidden}
+body:before,body:after{content:"";position:fixed;width:330px;height:330px;border-radius:50%;filter:blur(90px);opacity:.35;z-index:-1}
+body:before{background:#4f46e5;top:-120px;left:-100px}
+body:after{background:#c026d3;right:-120px;bottom:-120px}
+.container{width:90%;max-width:1100px;margin:auto;padding:60px 0 30px}
+header{text-align:center;margin-bottom:50px}
+.logo{width:60px;height:60px;margin:0 auto 18px;display:flex;align-items:center;justify-content:center;font-size:28px;border-radius:18px;background:linear-gradient(135deg,#6366f1,#c026d3);box-shadow:0 15px 40px #6366f155}
+header h1{font-size:48px;font-weight:700}
+header p{margin-top:10px;color:#aeb5ca}
+.cards{display:grid;grid-template-columns:repeat(2,1fr);gap:25px}
+.card{padding:30px;border-radius:24px;background:#ffffff12;border:1px solid #ffffff1f;backdrop-filter:blur(18px);box-shadow:0 20px 60px #00000040;transition:.3s}
+.card:hover{transform:translateY(-6px);border-color:#ffffff40}
+.icon{width:50px;height:50px;display:flex;align-items:center;justify-content:center;border-radius:15px;font-size:22px;font-weight:bold;background:#6366f133;color:#a5b4fc;margin-bottom:20px}
+.card h2{font-size:25px;margin-bottom:8px}
+.description{color:#9da6bd;font-size:14px;line-height:1.6;margin-bottom:22px}
+input,textarea{width:100%;border:1px solid #ffffff1f;outline:none;background:#00000033;color:white;border-radius:14px;padding:15px;font-size:15px;transition:.3s}
+input{height:52px}
+textarea{height:125px;resize:vertical;font-family:inherit}
+input:focus,textarea:focus{border-color:#818cf8;box-shadow:0 0 0 3px #6366f120}
+input::placeholder,textarea::placeholder{color:#6f7890}
+button{width:100%;margin-top:15px;height:52px;border:0;border-radius:14px;color:white;font-size:15px;font-weight:600;cursor:pointer;background:linear-gradient(135deg,#6366f1,#a855f7);transition:.25s;box-shadow:0 10px 25px #6366f133}
+button:hover{transform:translateY(-2px);box-shadow:0 15px 30px #6366f155}
+.result{margin-top:18px;min-height:55px;padding:15px;display:flex;align-items:center;border-radius:14px;background:#00000033;color:#aeb5ca;word-break:break-word}
+.result.active{color:white;border:1px solid #818cf84d}
+.vowel-result{margin-top:18px;padding:18px;border-radius:15px;background:#00000033}
+.total{text-align:center;margin-bottom:15px}
+.vowel-result strong{display:block;font-size:35px;color:#a5b4fc}
+.vowel-result span{color:#8f98ae;font-size:13px}
+.vowels{display:grid;grid-template-columns:repeat(5,1fr);gap:8px}
+.vowels span{text-align:center;padding:10px 4px;border-radius:10px;background:#ffffff0d}
+.vowels b{display:block;margin-top:3px;color:white}
+footer{text-align:center;margin-top:35px}
+footer p{color:#646d84;font-size:13px}
+@media(max-width:800px){.cards{grid-template-columns:1fr}header h1{font-size:38px}}
+@media(max-width:450px){.card{padding:22px}.vowels{grid-template-columns:repeat(3,1fr)}}
+</style>
+</head>
+<body>
+<div class="container">
+<header>
+<div class="logo">✦</div>
+<h1>Text Toolkit</h1>
+<p>Reverse strings & analyze vowels with ease.</p>
+</header>
+
+<section class="cards">
+<div class="card">
+<div class="icon">↔</div>
+<h2>String Reverser</h2>
+<p class="description">Enter a string and instantly get its reversed form.</p>
+<input type="text" id="stringInput" placeholder="Enter your string...">
+<button onclick="reverseString()">Reverse String</button>
+<div class="result" id="reverseResult">Result will appear here</div>
+</div>
+
+<div class="card">
+<div class="icon">Aa</div>
+<h2>Vowel Counter</h2>
+<p class="description">Enter a paragraph to count all the vowels.</p>
+<textarea id="paragraphInput" placeholder="Write or paste your paragraph..."></textarea>
+<button onclick="countVowels()">Count Vowels</button>
+<div class="vowel-result">
+<div class="total"><strong id="vowelCount">0</strong><span>Total Vowels</span></div>
+<div class="vowels">
+<span>A: <b id="aCount">0</b></span>
+<span>E: <b id="eCount">0</b></span>
+<span>I: <b id="iCount">0</b></span>
+<span>O: <b id="oCount">0</b></span>
+<span>U: <b id="uCount">0</b></span>
+</div>
+</div>
+</div>
+</section>
+
+<footer><p>Simple • Fast • Interactive</p></footer>
+</div>
+
+<script>
+function reverseString(){
+const input=document.getElementById("stringInput").value;
+const result=document.getElementById("reverseResult");
+if(input.trim()===""){result.textContent="Please enter a string first.";result.classList.remove("active");return}
+result.textContent=input.split("").reverse().join("");
+result.classList.add("active");
+}
+
+function countVowels(){
+const text=document.getElementById("paragraphInput").value.toLowerCase();
+const c={a:0,e:0,i:0,o:0,u:0};
+for(const ch of text){if(Object.prototype.hasOwnProperty.call(c,ch))c[ch]++}
+document.getElementById("vowelCount").textContent=c.a+c.e+c.i+c.o+c.u;
+document.getElementById("aCount").textContent=c.a;
+document.getElementById("eCount").textContent=c.e;
+document.getElementById("iCount").textContent=c.i;
+document.getElementById("oCount").textContent=c.o;
+document.getElementById("uCount").textContent=c.u;
+}
+</script>
+</body>
+</html>
