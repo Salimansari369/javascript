@@ -1,0 +1,323 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>  Palindrome Checker </title>
+
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@700&family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+
+<style>
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:'Poppins',sans-serif;
+}
+
+body{
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    min-height:100vh;
+    background:#050505;
+    overflow:hidden;
+    position:relative;
+}
+
+
+
+body::before{
+    content:"";
+    position:absolute;
+    width:500px;
+    height:500px;
+    background:#7d0000;
+    border-radius:50%;
+    filter:blur(180px);
+    top:-150px;
+    left:-150px;
+    opacity:.45;
+}
+
+body::after{
+    content:"";
+    position:absolute;
+    width:450px;
+    height:450px;
+    background:#b30000;
+    border-radius:50%;
+    filter:blur(170px);
+    bottom:-150px;
+    right:-150px;
+    opacity:.35;
+}
+
+
+
+.container::before{
+
+    content:"";
+    position:absolute;
+    top:-18px;
+    left:25px;
+    font-size:34px;
+
+}
+
+.container::after{
+
+    content:" ";
+    position:absolute;
+    top:-18px;
+    right:25px;
+    font-size:34px;
+
+}
+
+.container:hover{
+
+    transform:translateY(-8px);
+
+    box-shadow:
+    0 0 25px crimson,
+    0 0 80px rgba(255,0,0,.25);
+
+}
+
+
+.container::before{
+
+    content:" ";
+    position:absolute;
+    top:-18px;
+    left:25px;
+    font-size:34px;
+
+}
+
+.container::after{
+
+    content:" ";
+    position:absolute;
+    top:-18px;
+    right:25px;
+    font-size:34px;
+
+}
+
+h2{
+
+    font-family:'Cinzel',serif;
+    text-align:center;
+    color:#ff2b2b;
+    font-size:32px;
+    letter-spacing:2px;
+
+}
+
+.subtitle{
+
+    color:#8f8f8f;
+    text-align:center;
+    margin:15px 0 30px;
+
+}
+
+
+
+input{
+
+    width:100%;
+    padding:15px;
+
+    background:#111;
+
+    color:white;
+
+    border:2px solid #330000;
+
+    border-radius:12px;
+
+    outline:none;
+
+    transition:.35s;
+
+    font-size:15px;
+
+}
+
+input::placeholder{
+
+    color:#777;
+
+}
+
+input:focus{
+
+    border-color:#ff0000;
+
+    box-shadow:0 0 20px rgba(255,0,0,.4);
+
+}
+
+
+button{
+
+    width:100%;
+
+    margin-top:22px;
+
+    padding:15px;
+
+    border:none;
+
+    border-radius:12px;
+
+    background:linear-gradient(135deg,#4d0000,#ff1c1c);
+
+    color:white;
+
+    font-size:17px;
+
+    font-weight:600;
+
+    cursor:pointer;
+
+    transition:.35s;
+
+}
+
+button:hover{
+
+    transform:translateY(-3px);
+
+    letter-spacing:2px;
+
+    box-shadow:0 0 20px crimson;
+
+}
+
+button:active{
+
+    transform:scale(.97);
+
+}
+
+
+
+#result{
+
+    margin-top:25px;
+
+    text-align:center;
+
+    color:white;
+
+    font-size:20px;
+
+    font-weight:bold;
+
+    min-height:30px;
+
+}
+
+
+.footer{
+
+    margin-top:25px;
+
+    text-align:center;
+
+    color:#666;
+
+    font-size:12px;
+
+}
+
+</style>
+
+</head>
+
+<body>
+
+<div class="container">
+
+<h2>PALINDROME CHECKER</h2>
+
+<p class="subtitle">
+Check whether your text is a palindrome.
+</p>
+
+<input
+type="text"
+id="text"
+placeholder="Enter your text..."
+>
+
+<button onclick="checkPalindrome()">
+ CHECK NOW
+</button>
+
+<p id="result"></p>
+
+<div class="footer">
+name:- Salim ANsari /24070521005
+</div>
+
+</div>
+
+<script>
+
+function checkPalindrome(){
+
+try{
+
+let text=document.getElementById("text").value;
+
+if(text.trim()==""){
+
+throw "Enter some text first ";
+
+}
+
+let original=text.toLowerCase().replace(/[^a-z0-9]/g,"");
+
+let reverse=original.split("").reverse().join("");
+
+if(original===reverse){
+
+document.getElementById("result").innerHTML=" PALINDROME APPROVED ";
+
+alert(" The  approves this Palindrome!");
+
+}
+
+else{
+
+document.getElementById("result").innerHTML="❌ Not a Palindrome!";
+alert("Not a Palindrome.");
+
+}
+}
+catch(error){
+alert("❌ Error : "+error);
+
+document.getElementById("result").innerHTML="⚠ "+error;
+
+}
+
+finally{
+
+console.log("Palindrome Checker Executed");
+
+}
+
+}
+
+</script>
+
+</body>
+</html> 
