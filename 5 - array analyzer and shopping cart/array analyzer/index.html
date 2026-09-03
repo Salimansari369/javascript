@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Book Cart Calculator</title>
+
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+    <main class="container">
+
+        <header class="header">
+            <div class="book-icon">📚</div>
+
+            <h1>Book Cart Calculator</h1>
+
+            <p>
+                
+            </p>
+        </header>
+
+
+        <section class="top-grid">
+
+           
+            <div class="card add-card">
+
+                <div class="card-heading">
+                    <div>
+                        <span class="eyebrow">BOOK COLLECTION</span>
+                        <h2>Add a Book</h2>
+                    </div>
+                </div>
+
+                <form id="bookForm">
+
+                    <div class="form-grid">
+
+                        <div class="form-group">
+                            <label for="title">Book Title</label>
+                            <input
+                                type="text"
+                                id="title"
+                                placeholder="e.g. Deep Work"
+                                required
+                            >
+                        </div>
+
+                        <div class="form-group">
+                            <label for="author">Author</label>
+                            <input
+                                type="text"
+                                id="author"
+                                placeholder="e.g. Cal Newport"
+                                required
+                            >
+                        </div>
+
+                        <div class="form-group">
+                            <label for="price">Price (₹)</label>
+                            <input
+                                type="number"
+                                id="price"
+                                placeholder="350"
+                                min="1"
+                                required
+                            >
+                        </div>
+
+                        <div class="form-group">
+                            <label for="quantity">Quantity</label>
+                            <input
+                                type="number"
+                                id="quantity"
+                                value="1"
+                                min="1"
+                                required
+                            >
+                        </div>
+
+                    </div>
+
+                    <button type="submit" class="primary-btn">
+                        + Add to Cart
+                    </button>
+
+                </form>
+            </div>
+
+
+            
+            <div class="card summary-card">
+
+                <span class="eyebrow">YOUR CART</span>
+
+                <h2>Cart Summary</h2>
+
+                <div class="summary-line">
+                    <span>Subtotal</span>
+                    <strong id="subtotal">₹0.00</strong>
+                </div>
+
+                <div class="summary-line discount-line">
+                    <span id="discountLabel">Discount (0%)</span>
+                    <strong id="discount">-₹0.00</strong>
+                </div>
+
+                <div class="summary-divider"></div>
+
+                <div class="final-line">
+                    <span>Final Total</span>
+                    <strong id="finalTotal">₹0.00</strong>
+                </div>
+
+                <div class="discount-message" id="discountMessage">
+                    Add books to start building your cart.
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <section class="main-grid">
+
+            
+            <div class="card books-card">
+
+                <div class="section-header">
+
+                    <div>
+                        <span class="eyebrow">COLLECTION</span>
+                        <h2>Your Books</h2>
+                    </div>
+
+                    <span class="book-count" id="bookCount">
+                        0 books
+                    </span>
+
+                </div>
+
+
+                <div class="filter-box">
+
+                    <label>
+                        <input
+                            type="checkbox"
+                            id="priceFilter"
+                        >
+
+                        Show only books above ₹400
+                    </label>
+
+                </div>
+
+
+                <div id="bookList" class="book-list"></div>
+
+            </div>
+
+
+            <aside class="sidebar">
+
+
+               
+                <div class="card analysis-card">
+
+                    <span class="eyebrow">ARRAY ANALYSIS</span>
+
+                    <h2>Book Price Analysis</h2>
+
+                    <div class="analysis-item">
+
+                        <div class="analysis-icon expensive">
+                            ↑
+                        </div>
+
+                        <div>
+                            <span>MOST EXPENSIVE</span>
+
+                            <strong id="maxBook">
+                                —
+                            </strong>
+
+                            <small id="maxPrice">
+                                ₹0
+                            </small>
+                        </div>
+
+                    </div>
+
+
+                    <div class="analysis-item">
+
+                        <div class="analysis-icon cheap">
+                            ↓
+                        </div>
+
+                        <div>
+                            <span>CHEAPEST</span>
+
+                            <strong id="minBook">
+                                —
+                            </strong>
+
+                            <small id="minPrice">
+                                ₹0
+                            </small>
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <div class="card find-card">
+
+                    <span class="eyebrow">FIND METHOD</span>
+
+                    <h2>Find Book by ID</h2>
+
+                    <div class="find-row">
+
+                        <input
+                            type="number"
+                            id="findId"
+                            placeholder="Enter book ID"
+                        >
+
+                        <button
+                            id="findBtn"
+                            class="small-btn"
+                        >
+                            find()
+                        </button>
+
+                    </div>
+
+                    <div id="findResult" class="find-result">
+                        Enter an ID to find a book.
+                    </div>
+
+                </div>
+
+
+        
+                <div class="card analyzer-card">
+
+                    <span class="eyebrow">ARRAY METHODS</span>
+
+                    <h2>Array Analyzer</h2>
+
+                    <p class="analyzer-description">
+                        Enter numbers separated by commas to find
+                        their maximum and minimum.
+                    </p>
+
+                    <label>ARRAY ELEMENTS</label>
+
+                    <input
+                        type="text"
+                        id="arrayInput"
+                        placeholder="e.g. 65, 32, 88, 7"
+                    >
+
+                    <button
+                        id="analyzeBtn"
+                        class="primary-btn"
+                    >
+                        Analyze Array
+                    </button>
+
+                    <div class="array-results">
+
+                        <div>
+                            <span>Array</span>
+                            <strong id="arrayOutput">—</strong>
+                        </div>
+
+                        <div>
+                            <span>Maximum Value</span>
+                            <strong id="maximumValue">—</strong>
+                        </div>
+
+                        <div>
+                            <span>Minimum Value</span>
+                            <strong id="minimumValue">—</strong>
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </aside>
+
+        </section>
+
+
+        <footer>
+            Design by Salim Ansari/ 24070521005
+        </footer>
+
+    </main>
+
+
+    <script src="script.js"></script>
+
+</body>
+</html>
