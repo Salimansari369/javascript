@@ -1,0 +1,525 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>My To-Do List</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+ 
+<style>
+    :root{
+        --teal-1:#0d9488;
+        --teal-2:#0891b2;
+        --ink:#0f2d33;
+        --muted:#5b7580;
+        --card:#ffffff;
+        --field:#f0f6f6;
+        --edit-1:#f59e0b;
+        --edit-2:#f97316;
+        --del-1:#f43f5e;
+        --del-2:#e11d48;
+        --border:#e3edee;
+    }
+ 
+    *{ box-sizing: border-box; }
+ 
+    body{
+        margin: 0;
+        min-height: 100vh;
+        font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+        background: linear-gradient(160deg, #f4fbfb 0%, #eaf6f6 45%, #e3f1f5 100%);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 40px 16px;
+        position: relative;
+        overflow: hidden;
+    }
+ 
+    .bg-scene{
+        position: fixed;
+        inset: 0;
+        z-index: 0;
+        pointer-events: none;
+        overflow: hidden;
+    }
+ 
+    .blob{
+        position: absolute;
+        border-radius: 50%;
+        filter: blur(70px);
+        opacity: 0.55;
+        animation-iteration-count: infinite;
+        animation-timing-function: ease-in-out;
+    }
+    .blob-1{
+        width: 380px; height: 380px;
+        top: -100px; left: -90px;
+        background: radial-gradient(circle, rgba(13,148,136,0.55), transparent 70%);
+        animation-name: drift1;
+        animation-duration: 22s;
+    }
+    .blob-2{
+        width: 420px; height: 420px;
+        bottom: -140px; right: -110px;
+        background: radial-gradient(circle, rgba(8,145,178,0.5), transparent 70%);
+        animation-name: drift2;
+        animation-duration: 26s;
+    }
+    .blob-3{
+        width: 300px; height: 300px;
+        top: 40%; left: 60%;
+        background: radial-gradient(circle, rgba(45,212,191,0.45), transparent 70%);
+        animation-name: drift3;
+        animation-duration: 19s;
+    }
+    .blob-4{
+        width: 260px; height: 260px;
+        top: 12%; left: 20%;
+        background: radial-gradient(circle, rgba(94,234,212,0.4), transparent 70%);
+        animation-name: drift4;
+        animation-duration: 24s;
+    }
+ 
+    @keyframes drift1{
+        0%,100%{ transform: translate(0,0) scale(1); }
+        33%{ transform: translate(60px,40px) scale(1.12); }
+        66%{ transform: translate(20px,90px) scale(0.94); }
+    }
+    @keyframes drift2{
+        0%,100%{ transform: translate(0,0) scale(1); }
+        33%{ transform: translate(-50px,-60px) scale(1.1); }
+        66%{ transform: translate(-90px,-10px) scale(0.95); }
+    }
+    @keyframes drift3{
+        0%,100%{ transform: translate(0,0) scale(1); }
+        50%{ transform: translate(-70px,50px) scale(1.15); }
+    }
+    @keyframes drift4{
+        0%,100%{ transform: translate(0,0) scale(1); }
+        50%{ transform: translate(50px,-40px) scale(0.9); }
+    }
+ 
+    .grid-overlay{
+        position:absolute;
+        inset:0;
+        background-image:
+            linear-gradient(rgba(15,61,63,0.035) 1px, transparent 1px),
+            linear-gradient(90deg, rgba(15,61,63,0.035) 1px, transparent 1px);
+        background-size: 46px 46px;
+        mask-image: radial-gradient(circle at 50% 40%, black 0%, transparent 75%);
+    }
+ 
+    .particle{
+        position:absolute;
+        bottom:-20px;
+        border-radius: 50%;
+        background: radial-gradient(circle, rgba(13,148,136,0.65), rgba(8,145,178,0.15));
+        animation-name: rise;
+        animation-timing-function: linear;
+        animation-iteration-count: infinite;
+    }
+    @keyframes rise{
+        0%{ transform: translateY(0) translateX(0); opacity: 0; }
+        8%{ opacity: 0.8; }
+        90%{ opacity: 0.4; }
+        100%{ transform: translateY(-112vh) translateX(var(--drift, 40px)); opacity: 0; }
+    }
+ 
+    .tilt-wrap{
+        perspective: 1400px;
+        position: relative;
+        z-index: 1;
+    }
+ 
+    .container{
+        width: 100%;
+        max-width: 440px;
+        background: var(--card);
+        border-radius: 28px;
+        padding: 36px 32px 26px;
+        box-shadow:
+            0 30px 60px -20px rgba(6, 60, 60, 0.25),
+            0 8px 20px -8px rgba(6, 60, 60, 0.12);
+        position: relative;
+        overflow: hidden;
+        transform-style: preserve-3d;
+        transform: perspective(1400px) rotateX(0deg) rotateY(0deg);
+        transition: transform 0.5s cubic-bezier(0.22, 1, 0.36, 1), box-shadow 0.4s ease;
+        will-change: transform;
+    }
+ 
+    .container.tilting{
+        transition: transform 0.08s linear;
+    }
+ 
+    .container::before{
+        content:"";
+        position:absolute;
+        top:-70px; right:-70px;
+        width:180px; height:180px;
+        background: linear-gradient(135deg, var(--teal-1), var(--teal-2));
+        opacity:0.10;
+        border-radius:50%;
+    }
+ 
+    .glare{
+        position:absolute;
+        inset:0;
+        pointer-events:none;
+        background: radial-gradient(circle at 50% 30%, rgba(255,255,255,0.55), transparent 55%);
+        opacity: 0;
+        transition: opacity 0.4s ease;
+        mix-blend-mode: overlay;
+    }
+    .container.tilting .glare{ opacity: 1; }
+ 
+    .depth-1{ transform: translateZ(26px); }
+    .depth-2{ transform: translateZ(16px); }
+    .depth-3{ transform: translateZ(8px); }
+ 
+    .icon-badge{
+        width: 56px;
+        height: 56px;
+        margin: 0 auto 16px;
+        border-radius: 16px;
+        background: linear-gradient(135deg, var(--teal-1), var(--teal-2));
+        display:flex;
+        align-items:center;
+        justify-content:center;
+        box-shadow: 0 10px 20px -8px rgba(13,148,136,0.55);
+    }
+    .icon-badge svg{ width:26px; height:26px; }
+ 
+    h1{
+        font-family:'Poppins', sans-serif;
+        text-align:center;
+        font-size: 1.6rem;
+        font-weight: 700;
+        color: var(--ink);
+        margin: 0 0 4px;
+        letter-spacing: -0.01em;
+    }
+ 
+    .subtitle{
+        text-align:center;
+        color: var(--muted);
+        font-size: 0.86rem;
+        margin: 0 0 26px;
+    }
+ 
+    .input-row{
+        display:flex;
+        gap: 10px;
+        margin-bottom: 26px;
+    }
+ 
+    #taskInput{
+        flex:1;
+        border: 1.5px solid var(--border);
+        background: var(--field);
+        border-radius: 14px;
+        padding: 13px 16px;
+        font-size: 0.95rem;
+        font-family: inherit;
+        color: var(--ink);
+        outline: none;
+        transition: border-color 0.18s ease, box-shadow 0.18s ease;
+    }
+    #taskInput::placeholder{ color: #93a9ae; }
+    #taskInput:focus{
+        border-color: var(--teal-2);
+        box-shadow: 0 0 0 4px rgba(8,145,178,0.14);
+    }
+ 
+    #addBtn{
+        border: none;
+        padding: 0 22px;
+        border-radius: 14px;
+        background: linear-gradient(135deg, var(--teal-1), var(--teal-2));
+        color: white;
+        font-weight: 600;
+        font-size: 0.92rem;
+        cursor: pointer;
+        transition: transform 0.15s ease, box-shadow 0.15s ease;
+        box-shadow: 0 8px 16px -6px rgba(8,145,178,0.55);
+    }
+    #addBtn:hover{ transform: translateY(-1px); }
+    #addBtn:active{ transform: translateY(0); }
+ 
+    .list-header{
+        display:flex;
+        align-items:center;
+        justify-content: space-between;
+        margin-bottom: 14px;
+    }
+    .list-header h2{
+        font-family:'Poppins', sans-serif;
+        font-size: 1.02rem;
+        font-weight: 600;
+        color: var(--ink);
+        margin: 0;
+    }
+    .count-chip{
+        background: #e7f6f4;
+        color: var(--teal-1);
+        font-size: 0.76rem;
+        font-weight: 600;
+        padding: 5px 12px;
+        border-radius: 999px;
+    }
+ 
+    ul{
+        list-style:none;
+        margin: 0;
+        padding: 0;
+        display:flex;
+        flex-direction: column;
+        gap: 10px;
+        min-height: 40px;
+    }
+ 
+    li{
+        display:flex;
+        align-items:center;
+        justify-content: space-between;
+        gap: 10px;
+        background: var(--field);
+        border: 1px solid var(--border);
+        padding: 13px 16px;
+        border-radius: 16px;
+        animation: pop 0.22s ease;
+    }
+    li.done span{ text-decoration: line-through; color:#9fb1b5; }
+ 
+    @keyframes pop{
+        from{ opacity:0; transform: translateY(6px) scale(0.98); }
+        to{ opacity:1; transform: translateY(0) scale(1); }
+    }
+ 
+    li span{
+        font-size: 0.92rem;
+        color: var(--ink);
+        word-break: break-word;
+        flex: 1;
+        cursor: pointer;
+    }
+ 
+    .buttons{
+        display:flex;
+        gap: 6px;
+        flex-shrink: 0;
+    }
+ 
+    .buttons button{
+        border:none;
+        padding: 7px 14px;
+        border-radius: 999px;
+        font-size: 0.78rem;
+        font-weight: 600;
+        color: white;
+        cursor: pointer;
+        transition: filter 0.15s ease, transform 0.15s ease;
+    }
+    .buttons button:hover{ filter: brightness(1.06); transform: translateY(-1px); }
+ 
+    .edit{ background: linear-gradient(135deg, var(--edit-1), var(--edit-2)); }
+    .delete{ background: linear-gradient(135deg, var(--del-1), var(--del-2)); }
+ 
+    .empty-state{
+        text-align:center;
+        color: var(--muted);
+        font-size: 0.85rem;
+        padding: 22px 0 8px;
+    }
+ 
+    footer{
+        margin-top: 26px;
+        padding-top: 16px;
+        border-top: 1px solid var(--border);
+        text-align:center;
+        color: #9fb1b5;
+        font-size: 0.75rem;
+        line-height: 1.6;
+    }
+    footer b{ color: var(--teal-2); }
+</style>
+</head>
+<body>
+ 
+<div class="bg-scene" id="bgScene">
+    <div class="blob blob-1"></div>
+    <div class="blob blob-2"></div>
+    <div class="blob blob-3"></div>
+    <div class="blob blob-4"></div>
+    <div class="grid-overlay"></div>
+</div>
+ 
+<div class="tilt-wrap">
+<div class="container" id="tiltCard">
+    <div class="glare"></div>
+ 
+    <div class="icon-badge depth-1">
+        <svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="20 6 9 17 4 12"></polyline>
+        </svg>
+    </div>
+ 
+    <h1 class="depth-2">My To-Do List</h1>
+    <p class="subtitle depth-3">Little tasks. Big progress.</p>
+ 
+    <div class="input-row depth-2">
+        <input type="text" id="taskInput" placeholder="What would you like to do?">
+        <button id="addBtn">+ Add</button>
+    </div>
+ 
+    <div class="list-header depth-3">
+        <h2>Today's Tasks</h2>
+        <span class="count-chip" id="countChip">0 tasks</span>
+    </div>
+ 
+    <ul id="taskList"></ul>
+    <p class="empty-state" id="emptyState">No tasks yet — add your first one above ✨</p>
+ 
+    <footer>Designed by <b>Salim Ansari</b><br>PRN: <b>24070521005</b></footer>
+</div>
+</div>
+ 
+<script>
+    const taskInput = document.getElementById('taskInput');
+    const addBtn = document.getElementById('addBtn');
+    const taskList = document.getElementById('taskList');
+    const emptyState = document.getElementById('emptyState');
+    const countChip = document.getElementById('countChip');
+ 
+    function updateMeta(){
+        const total = taskList.children.length;
+        countChip.textContent = total === 1 ? "1 task" : total + " tasks";
+        emptyState.style.display = total === 0 ? "block" : "none";
+    }
+ 
+    function addTask(){
+        const task = taskInput.value.trim();
+        if (task === ""){
+            taskInput.style.borderColor = "#f43f5e";
+            taskInput.placeholder = "Please enter a task!";
+            setTimeout(() => { taskInput.style.borderColor = ""; taskInput.placeholder = "What would you like to do?"; }, 1400);
+            return;
+        }
+ 
+        const li = document.createElement('li');
+ 
+        const span = document.createElement('span');
+        span.textContent = task;
+        span.title = "Click to mark as done";
+        span.addEventListener('click', () => li.classList.toggle('done'));
+ 
+        const buttons = document.createElement('div');
+        buttons.className = 'buttons';
+ 
+        const editBtn = document.createElement('button');
+        editBtn.textContent = 'Edit';
+        editBtn.className = 'edit';
+        editBtn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            const newTask = prompt("Edit your task:", span.textContent);
+            if (newTask !== null && newTask.trim() !== "") {
+                span.textContent = newTask.trim();
+            }
+        });
+ 
+        const deleteBtn = document.createElement('button');
+        deleteBtn.textContent = 'Delete';
+        deleteBtn.className = 'delete';
+        deleteBtn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            li.remove();
+            updateMeta();
+        });
+ 
+        buttons.appendChild(editBtn);
+        buttons.appendChild(deleteBtn);
+        li.appendChild(span);
+        li.appendChild(buttons);
+        taskList.appendChild(li);
+ 
+        taskInput.value = "";
+        taskInput.focus();
+        updateMeta();
+    }
+ 
+    addBtn.addEventListener('click', addTask);
+    taskInput.addEventListener('keydown', (e) => {
+        if (e.key === "Enter") addTask();
+    });
+ 
+    updateMeta();
+ 
+    const tiltCard = document.getElementById('tiltCard');
+    const MAX_TILT = 9;      
+    const MAX_LIFT = 1.015;  
+ 
+    function handleTiltMove(e){
+        const rect = tiltCard.getBoundingClientRect();
+        const x = e.clientX - rect.left;
+        const y = e.clientY - rect.top;
+ 
+        const percentX = (x / rect.width - 0.5) * 2;   
+        const percentY = (y / rect.height - 0.5) * 2;   
+ 
+        const rotateY = percentX * MAX_TILT;
+        const rotateX = percentY * -MAX_TILT;
+ 
+        tiltCard.classList.add('tilting');
+        tiltCard.style.transform =
+            `perspective(1400px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale3d(${MAX_LIFT}, ${MAX_LIFT}, ${MAX_LIFT})`;
+ 
+        const glare = tiltCard.querySelector('.glare');
+        glare.style.background =
+            `radial-gradient(circle at ${x}px ${y}px, rgba(255,255,255,0.5), transparent 55%)`;
+    }
+ 
+    function resetTilt(){
+        tiltCard.classList.remove('tilting');
+        tiltCard.style.transform = 'perspective(1400px) rotateX(0deg) rotateY(0deg) scale3d(1, 1, 1)';
+    }
+ 
+    tiltCard.addEventListener('mousemove', handleTiltMove);
+    tiltCard.addEventListener('mouseleave', resetTilt);
+ 
+    
+    tiltCard.addEventListener('touchmove', (e) => {
+        const touch = e.touches[0];
+        handleTiltMove({ clientX: touch.clientX, clientY: touch.clientY });
+    }, { passive: true });
+    tiltCard.addEventListener('touchend', resetTilt);
+ 
+
+    const bgScene = document.getElementById('bgScene');
+    const PARTICLE_COUNT = 22;
+ 
+    for (let i = 0; i < PARTICLE_COUNT; i++){
+        const p = document.createElement('div');
+        p.className = 'particle';
+ 
+        const size = 4 + Math.random() * 7;           
+        const left = Math.random() * 100;             
+        const duration = 14 + Math.random() * 16;       
+        const delay = Math.random() * -30;              
+        const drift = (Math.random() * 120 - 60) + 'px'; 
+ 
+        p.style.width = size + 'px';
+        p.style.height = size + 'px';
+        p.style.left = left + '%';
+        p.style.setProperty('--drift', drift);
+        p.style.animationDuration = duration + 's';
+        p.style.animationDelay = delay + 's';
+ 
+        bgScene.appendChild(p);
+    }
+</script>
+</body>
+</html>
+ 
