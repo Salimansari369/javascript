@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Create Account</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div class="auth-card">
+
+<aside class="panel-left">
+<div class="mark">to-do</div>
+<h2>Grow something<br>new today.</h2>
+<p>Set up your account and start building.</p>
+
+<svg class="art" viewBox="0 0 320 260" xmlns="http://www.w3.org/2000/svg">
+<circle cx="160" cy="130" r="95" fill="rgba(255,255,255,0.06)"/>
+<path d="M60 190 Q160 60 260 190" stroke="#E7B75F" stroke-width="3" fill="none" stroke-linecap="round"/>
+<circle cx="60" cy="190" r="8" fill="#E7B75F"/>
+<circle cx="160" cy="80" r="8" fill="#8FD3B6"/>
+<circle cx="260" cy="190" r="8" fill="#E7B75F"/>
+<rect x="120" y="150" width="80" height="60" rx="8" fill="#8FD3B6" opacity="0.85"/>
+<rect x="140" y="128" width="40" height="26" rx="4" fill="#E7B75F"/>
+</svg>
+</aside>
+
+<section class="panel-right">
+
+<header class="card-head">
+<h1>Create account</h1>
+<p class="sub">Fill in your information below</p>
+</header>
+
+<form id="regForm" novalidate>
+
+<p class="section-label">Personal information</p>
+
+<div class="field-row">
+<div class="field">
+<label for="firstname">First name <span class="req">*</span></label>
+<div class="input-icon">
+<svg viewBox="0 0 24 24"><path d="M12 12a4.5 4.5 0 1 0 0-9 4.5 4.5 0 0 0 0 9Zm0 2c-4 0-8 2-8 5v1h16v-1c0-3-4-5-8-5Z"/></svg>
+<input type="text" id="firstname" name="firstname" placeholder="First name">
+</div>
+<span class="error" id="err-firstname"></span>
+</div>
+
+<div class="field">
+<label for="lastname">Last name</label>
+<div class="input-icon">
+<svg viewBox="0 0 24 24"><path d="M12 12a4.5 4.5 0 1 0 0-9 4.5 4.5 0 0 0 0 9Zm0 2c-4 0-8 2-8 5v1h16v-1c0-3-4-5-8-5Z"/></svg>
+<input type="text" id="lastname" name="lastname" placeholder="Last name">
+</div>
+</div>
+</div>
+
+<div class="field">
+<label>Birthday</label>
+<div class="birthday-row">
+<select id="bday-day" name="day"><option value="">Day</option></select>
+<select id="bday-month" name="month"><option value="">Month</option></select>
+<select id="bday-year" name="year"><option value="">Year</option></select>
+</div>
+<span class="error" id="err-birthday"></span>
+</div>
+
+<p class="section-label">Account details</p>
+
+<div class="field-row">
+<div class="field">
+<label for="username">Username <span class="req">*</span></label>
+<div class="input-icon">
+<svg viewBox="0 0 24 24"><path d="M12 2 2 7v6c0 5 4.2 8.5 10 9 5.8-.5 10-4 10-9V7l-10-5Z"/></svg>
+<input type="text" id="username" name="username" placeholder="Username">
+</div>
+<span class="error" id="err-username"></span>
+</div>
+
+<div class="field">
+<label for="email">E-mail</label>
+<div class="input-icon">
+<svg viewBox="0 0 24 24"><path d="M3 5h18v14H3V5Zm0 0 9 7 9-7"/></svg>
+<input type="text" id="email" name="email" placeholder="name@email.com">
+</div>
+<span class="error" id="err-email"></span>
+</div>
+</div>
+
+<div class="field">
+<label for="website">Website</label>
+<div class="input-icon">
+<svg viewBox="0 0 24 24"><path d="M12 2a10 10 0 1 0 0 20 10 10 0 0 0 0-20Zm0 0c2.5 2.7 4 6.2 4 10s-1.5 7.3-4 10m0-20c-2.5 2.7-4 6.2-4 10s1.5 7.3 4 10M2.5 9h19M2.5 15h19"/></svg>
+<input type="text" id="website" name="website" placeholder="https://example.com">
+</div>
+</div>
+
+<div class="field-row">
+<div class="field">
+<label for="password">Password <span class="req">*</span></label>
+<div class="input-icon">
+<svg viewBox="0 0 24 24"><path d="M6 11V8a6 6 0 1 1 12 0v3M5 11h14v10H5V11Z"/></svg>
+<input type="password" id="password" name="password" placeholder="Password">
+</div>
+<span class="error" id="err-password"></span>
+</div>
+
+<div class="field">
+<label for="repassword">Re-password <span class="req">*</span></label>
+<div class="input-icon">
+<svg viewBox="0 0 24 24"><path d="M6 11V8a6 6 0 1 1 12 0v3M5 11h14v10H5V11Z"/></svg>
+<input type="password" id="repassword" name="repassword" placeholder="Confirm password">
+</div>
+<span class="error" id="err-repassword"></span>
+</div>
+</div>
+
+<div class="field checkbox-field">
+<input type="checkbox" id="terms" name="terms">
+<label for="terms">I agree to the terms &amp; conditions.</label>
+<span class="error" id="err-terms"></span>
+</div>
+
+<button type="submit" id="submitBtn">Create account ✦</button>
+
+<div id="formStatus" class="status" role="status" aria-live="polite"></div>
+
+</form>
+
+<div class="designer">
+  
+Designed by <strong>Slaim Ansari</strong> <span>•</span> PRN: 24070521005
+</div>
+
+</section>
+</div>
+
+<script src="script.js"></script>
+</body>
+</html>
