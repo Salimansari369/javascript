@@ -1,0 +1,1114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>FITPASS - Gym Admission</title>
+
+<style>
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+}
+
+body{
+    font-family:Arial,Helvetica,sans-serif;
+    min-height:100vh;
+    background:#f4f5f6;
+    color:#17191b;
+    overflow-x:hidden;
+}
+
+
+.background{
+    position:fixed;
+    inset:0;
+    overflow:hidden;
+    z-index:0;
+    background:
+        radial-gradient(circle at 15% 25%,rgba(230,57,70,.13),transparent 25%),
+        radial-gradient(circle at 90% 75%,rgba(230,57,70,.10),transparent 28%),
+        linear-gradient(135deg,#ffffff 0%,#f3f4f5 100%);
+}
+
+.background:before{
+    content:"";
+    position:absolute;
+    width:700px;
+    height:700px;
+    right:-300px;
+    top:-300px;
+    border-radius:50%;
+    border:90px solid rgba(230,57,70,.035);
+    box-shadow:
+        0 0 0 70px rgba(230,57,70,.025),
+        0 0 0 140px rgba(230,57,70,.018);
+}
+
+.background:after{
+    content:"";
+    position:absolute;
+    width:550px;
+    height:550px;
+    left:-300px;
+    bottom:-300px;
+    border-radius:50%;
+    border:80px solid rgba(0,0,0,.025);
+    box-shadow:
+        0 0 0 60px rgba(0,0,0,.015);
+}
+
+
+.light{
+    position:absolute;
+    border-radius:50%;
+    filter:blur(70px);
+    background:rgba(230,57,70,.08);
+    animation:lightMove 9s ease-in-out infinite alternate;
+}
+
+.light.one{
+    width:380px;
+    height:380px;
+    left:-150px;
+    top:15%;
+}
+
+.light.two{
+    width:320px;
+    height:320px;
+    right:-130px;
+    bottom:8%;
+    animation-delay:3s;
+}
+
+@keyframes lightMove{
+    from{
+        transform:translate(0,0);
+    }
+    to{
+        transform:translate(70px,40px) scale(1.15);
+    }
+}
+
+
+.equipment{
+    position:absolute;
+    opacity:.15;
+    z-index:1;
+    filter:drop-shadow(0 18px 15px rgba(0,0,0,.16));
+    animation:float 6s ease-in-out infinite;
+}
+
+
+.dumbbell{
+    width:190px;
+    height:70px;
+}
+
+.dumbbell .bar{
+    position:absolute;
+    width:115px;
+    height:14px;
+    left:38px;
+    top:28px;
+    border-radius:20px;
+    background:linear-gradient(
+        90deg,
+        #666,
+        #eee,
+        #777,
+        #fff,
+        #666
+    );
+}
+
+.dumbbell .plate{
+    position:absolute;
+    width:40px;
+    height:56px;
+    top:7px;
+    border-radius:8px;
+    background:linear-gradient(
+        145deg,
+        #d4d6d8,
+        #626669,
+        #b7babc
+    );
+    box-shadow:
+        inset 5px 5px 8px rgba(255,255,255,.5),
+        inset -5px -5px 8px rgba(0,0,0,.2);
+}
+
+.dumbbell .left{
+    left:0;
+}
+
+.dumbbell .right{
+    right:0;
+}
+
+.dumbbell.one{
+    left:3%;
+    top:22%;
+    transform:rotate(-25deg);
+}
+
+.dumbbell.two{
+    right:3%;
+    bottom:19%;
+    transform:rotate(25deg) scale(.85);
+    animation-delay:2s;
+}
+
+
+.plate3d{
+    width:150px;
+    height:150px;
+    border-radius:50%;
+    border:28px solid #a5a9ab;
+    background:#d6d8da;
+    box-shadow:
+        inset 0 0 0 8px #eee,
+        inset 0 0 0 16px #85898c,
+        0 22px 30px rgba(0,0,0,.16);
+}
+
+.plate3d:before{
+    content:"";
+    position:absolute;
+    width:43px;
+    height:43px;
+    left:25px;
+    top:25px;
+    border-radius:50%;
+    background:#f5f5f5;
+    border:8px solid #777b7e;
+}
+
+.plate3d:after{
+    content:"FIT";
+    position:absolute;
+    left:45px;
+    top:79px;
+    font-size:12px;
+    font-weight:bold;
+    letter-spacing:3px;
+    color:#73777a;
+}
+
+.plate3d.one{
+    right:5%;
+    top:16%;
+    animation-delay:1s;
+}
+
+.plate3d.two{
+    left:4%;
+    bottom:7%;
+    transform:scale(.55);
+    animation-delay:4s;
+}
+
+
+
+.kettle{
+    width:100px;
+    height:90px;
+    border-radius:48% 48% 35% 35%;
+    background:linear-gradient(
+        145deg,
+        #d6d8da,
+        #6d7174,
+        #babdc0
+    );
+    box-shadow:
+        inset 8px 8px 12px rgba(255,255,255,.7),
+        inset -10px -10px 15px rgba(0,0,0,.2),
+        0 20px 25px rgba(0,0,0,.15);
+}
+
+.kettle:before{
+    content:"";
+    position:absolute;
+    width:65px;
+    height:52px;
+    left:18px;
+    top:-35px;
+    border:13px solid #85898c;
+    border-bottom:0;
+    border-radius:40px 40px 0 0;
+}
+
+.kettle:after{
+    content:"";
+    position:absolute;
+    width:22px;
+    height:22px;
+    left:39px;
+    top:35px;
+    border-radius:50%;
+    background:#f5f5f5;
+    border:4px solid #777b7e;
+}
+
+.kettle.one{
+    left:16%;
+    top:12%;
+    transform:scale(.65);
+    animation-delay:1s;
+}
+
+.kettle.two{
+    right:17%;
+    bottom:10%;
+    transform:scale(.6);
+    animation-delay:4s;
+}
+
+
+
+.barbell{
+    width:310px;
+    height:80px;
+    right:-50px;
+    top:69%;
+    transform:rotate(-13deg);
+    animation-delay:2s;
+}
+
+.barbell .rod{
+    position:absolute;
+    width:260px;
+    height:13px;
+    left:25px;
+    top:35px;
+    border-radius:20px;
+    background:linear-gradient(
+        90deg,
+        #666,
+        #eee,
+        #777,
+        #fff,
+        #666
+    );
+}
+
+.barbell .disc{
+    position:absolute;
+    width:36px;
+    height:62px;
+    top:10px;
+    border-radius:7px;
+    background:linear-gradient(
+        145deg,
+        #c2c5c7,
+        #65696c,
+        #b5b8ba
+    );
+    box-shadow:
+        inset 5px 5px 8px rgba(255,255,255,.5),
+        inset -5px -5px 8px rgba(0,0,0,.2);
+}
+
+.barbell .d1{
+    left:0;
+}
+
+.barbell .d2{
+    left:39px;
+    height:72px;
+    top:5px;
+}
+
+.barbell .d3{
+    right:39px;
+    height:72px;
+    top:5px;
+}
+
+.barbell .d4{
+    right:0;
+}
+
+@keyframes float{
+    0%,100%{
+        translate:0 0;
+    }
+    50%{
+        translate:0 -22px;
+    }
+}
+
+
+
+.dot{
+    position:absolute;
+    width:5px;
+    height:5px;
+    border-radius:50%;
+    background:#e63946;
+    opacity:.3;
+    animation:particle 6s linear infinite;
+}
+
+.dot.a{
+    left:20%;
+    bottom:15%;
+}
+
+.dot.b{
+    left:75%;
+    bottom:25%;
+    animation-delay:2s;
+}
+
+.dot.c{
+    left:85%;
+    top:35%;
+    animation-delay:3s;
+}
+
+@keyframes particle{
+    0%{
+        opacity:0;
+        transform:translateY(20px);
+    }
+    30%{
+        opacity:.4;
+    }
+    100%{
+        opacity:0;
+        transform:translateY(-160px);
+    }
+}
+
+
+
+header{
+    position:relative;
+    z-index:20;
+    height:82px;
+    display:flex;
+    align-items:center;
+    padding:0 7%;
+    background:white;
+    border-bottom:1px solid #e5e5e5;
+    box-shadow:0 4px 18px rgba(0,0,0,.07);
+}
+
+
+
+.logo{
+    display:flex;
+    align-items:center;
+    gap:10px;
+}
+
+.logo-icon{
+    position:relative;
+    width:48px;
+    height:42px;
+}
+
+.logo-bar{
+    position:absolute;
+    width:42px;
+    height:7px;
+    left:3px;
+    top:3px;
+    background:#151b24;
+    border-radius:3px;
+}
+
+.logo-bar:before,
+.logo-bar:after{
+    content:"";
+    position:absolute;
+    width:4px;
+    height:16px;
+    top:-5px;
+    background:#151b24;
+    border-radius:2px;
+}
+
+.logo-bar:before{
+    left:7px;
+}
+
+.logo-bar:after{
+    right:7px;
+}
+
+.logo-pin{
+    position:absolute;
+    width:30px;
+    height:30px;
+    left:9px;
+    top:10px;
+    background:#e63946;
+    clip-path:polygon(
+        0 0,
+        100% 0,
+        50% 100%
+    );
+}
+
+.logo-pin:before{
+    content:"";
+    position:absolute;
+    width:13px;
+    height:13px;
+    left:8.5px;
+    top:4px;
+    border-radius:50%;
+    background:white;
+}
+
+.logo-text{
+    font-size:43px;
+    letter-spacing:5px;
+    font-weight:500;
+    color:#151b24;
+}
+
+.logo-text .fit{
+    color:#e63946;
+    font-weight:600;
+}
+
+.logo-text .pass{
+    color:#151b24;
+    font-weight:600;
+}
+
+.register{
+    font-size:13px;
+    vertical-align:top;
+    margin-left:-2px;
+}
+
+
+main{
+    position:relative;
+    z-index:10;
+    min-height:calc(100vh - 82px);
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    padding:35px 20px 70px;
+}
+
+.wrapper{
+    width:100%;
+    max-width:465px;
+}
+
+
+.intro{
+    text-align:center;
+    margin-bottom:20px;
+}
+
+.badge{
+    display:inline-flex;
+    align-items:center;
+    gap:7px;
+    padding:7px 14px;
+    background:white;
+    border:1px solid #efc6ca;
+    border-radius:30px;
+    color:#d52d3a;
+    font-size:10px;
+    font-weight:bold;
+    letter-spacing:1px;
+    text-transform:uppercase;
+    box-shadow:0 5px 15px rgba(0,0,0,.05);
+}
+
+.badge i{
+    width:6px;
+    height:6px;
+    background:#e63946;
+    border-radius:50%;
+}
+
+.intro h1{
+    margin-top:12px;
+    font-size:37px;
+    line-height:1.05;
+    letter-spacing:-1.5px;
+}
+
+.intro h1 span{
+    color:#e63946;
+}
+
+.intro p{
+    margin-top:8px;
+    color:#777c80;
+    font-size:13px;
+}
+
+
+.card{
+    position:relative;
+    background:rgba(255,255,255,.98);
+    border:1px solid #e1e3e5;
+    border-radius:22px;
+    padding:30px;
+    box-shadow:
+        0 25px 65px rgba(0,0,0,.12),
+        0 5px 18px rgba(0,0,0,.04);
+    animation:cardIn .7s ease;
+}
+
+.card:before{
+    content:"";
+    position:absolute;
+    top:0;
+    left:35px;
+    right:35px;
+    height:3px;
+    border-radius:0 0 10px 10px;
+    background:linear-gradient(
+        90deg,
+        transparent,
+        #e63946,
+        transparent
+    );
+}
+
+@keyframes cardIn{
+    from{
+        opacity:0;
+        transform:translateY(25px);
+    }
+    to{
+        opacity:1;
+        transform:translateY(0);
+    }
+}
+
+.card-head{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    margin-bottom:18px;
+}
+
+.card-head h2{
+    font-size:19px;
+}
+
+.card-head small{
+    color:#9a9ea1;
+    font-size:10px;
+    letter-spacing:1px;
+}
+
+
+
+label{
+    display:block;
+    margin:13px 0 6px;
+    font-size:12px;
+    font-weight:bold;
+    color:#3c4043;
+}
+
+input,
+select{
+    width:100%;
+    height:44px;
+    padding:0 13px;
+    border:1px solid #dfe1e3;
+    border-radius:9px;
+    background:#f9fafb;
+    outline:none;
+    font-size:13px;
+    color:#222;
+    transition:.25s;
+}
+
+input::placeholder{
+    color:#a1a5a8;
+}
+
+input:hover,
+select:hover{
+    background:white;
+    border-color:#c7cacc;
+}
+
+input:focus,
+select:focus{
+    background:white;
+    border-color:#e63946;
+    box-shadow:0 0 0 3px rgba(230,57,70,.08);
+}
+
+select{
+    cursor:pointer;
+}
+
+.error{
+    display:block;
+    min-height:14px;
+    margin-top:3px;
+    font-size:10px;
+    color:#e63946;
+}
+
+
+
+button{
+    width:100%;
+    height:48px;
+    margin-top:16px;
+    border:0;
+    border-radius:9px;
+    background:linear-gradient(
+        135deg,
+        #ed3d49,
+        #d32634
+    );
+    color:white;
+    font-size:12px;
+    font-weight:bold;
+    letter-spacing:1px;
+    cursor:pointer;
+    box-shadow:0 10px 22px rgba(230,57,70,.22);
+    transition:.3s;
+}
+
+button:hover{
+    transform:translateY(-2px);
+    box-shadow:0 15px 30px rgba(230,57,70,.30);
+}
+
+button:active{
+    transform:scale(.98);
+}
+
+.success{
+    min-height:16px;
+    margin-top:12px;
+    text-align:center;
+    color:#159447;
+    font-size:12px;
+    font-weight:bold;
+}
+
+
+footer{
+    position:fixed;
+    bottom:11px;
+    left:0;
+    width:100%;
+    text-align:center;
+    z-index:30;
+}
+
+footer span{
+    font-size:11px;
+    color:#999ea1;
+    letter-spacing:.5px;
+}
+
+footer strong{
+    color:#4d5255;
+}
+
+
+
+@media(max-width:600px){
+
+    header{
+        height:70px;
+        justify-content:center;
+        padding:0;
+    }
+
+    .logo-text{
+        font-size:35px;
+    }
+
+    .logo-icon{
+        transform:scale(.85);
+    }
+
+    main{
+        min-height:calc(100vh - 70px);
+        padding:25px 15px 60px;
+        align-items:flex-start;
+    }
+
+    .intro h1{
+        font-size:29px;
+    }
+
+    .intro p{
+        font-size:12px;
+    }
+
+    .card{
+        padding:23px 20px;
+        border-radius:18px;
+    }
+
+    .equipment{
+        opacity:.07;
+    }
+
+    footer{
+        bottom:7px;
+    }
+}
+</style>
+</head>
+
+
+<body>
+
+
+<div class="background">
+
+    <div class="light one"></div>
+    <div class="light two"></div>
+
+    <div class="equipment dumbbell one">
+        <div class="bar"></div>
+        <div class="plate left"></div>
+        <div class="plate right"></div>
+    </div>
+
+    <div class="equipment dumbbell two">
+        <div class="bar"></div>
+        <div class="plate left"></div>
+        <div class="plate right"></div>
+    </div>
+
+    <div class="equipment plate3d one"></div>
+    <div class="equipment plate3d two"></div>
+
+    <div class="equipment kettle one"></div>
+    <div class="equipment kettle two"></div>
+
+    <div class="equipment barbell">
+        <div class="rod"></div>
+        <div class="disc d1"></div>
+        <div class="disc d2"></div>
+        <div class="disc d3"></div>
+        <div class="disc d4"></div>
+    </div>
+
+    <div class="dot a"></div>
+    <div class="dot b"></div>
+    <div class="dot c"></div>
+
+</div>
+
+
+
+
+<header>
+
+    <div class="logo">
+
+        <div class="logo-icon">
+
+            <div class="logo-bar"></div>
+            <div class="logo-pin"></div>
+
+        </div>
+
+        <div class="logo-text">
+            <span class="fit">FIT</span><span class="pass">PASS</span><sup class="register">®</sup>
+        </div>
+
+    </div>
+
+</header>
+
+
+
+
+<main>
+
+    <div class="wrapper">
+
+        <div class="intro">
+
+            <div class="badge">
+                <i></i>
+                Premium Fitness Membership
+            </div>
+
+            <h1>
+                Build Your <span>Best</span><br>
+                Version
+            </h1>
+
+            <p>
+                Take the first step towards a stronger, healthier you.
+            </p>
+
+        </div>
+
+
+        <div class="card">
+
+            <div class="card-head">
+
+                <h2>Gym Admission</h2>
+
+                <small>01 / JOIN</small>
+
+            </div>
+
+
+            <form id="gymForm">
+
+                <label>Full Name</label>
+
+                <input
+                    type="text"
+                    id="name"
+                    placeholder="Enter your full name"
+                >
+
+                <span id="nameError" class="error"></span>
+
+
+                <label>Age</label>
+
+                <input
+                    type="number"
+                    id="age"
+                    placeholder="Enter your age"
+                >
+
+                <span id="ageError" class="error"></span>
+
+
+                <label>Email Address</label>
+
+                <input
+                    type="email"
+                    id="email"
+                    placeholder="Enter your email"
+                >
+
+                <span id="emailError" class="error"></span>
+
+
+                <label>Mobile Number</label>
+
+                <input
+                    type="text"
+                    id="mobile"
+                    placeholder="Enter 10-digit mobile number"
+                    maxlength="10"
+                >
+
+                <span id="mobileError" class="error"></span>
+
+
+                <label>Membership Plan</label>
+
+                <select id="plan">
+
+                    <option value="">Select your plan</option>
+                    <option value="Monthly">Monthly</option>
+                    <option value="Quarterly">Quarterly</option>
+                    <option value="Yearly">Yearly</option>
+
+                </select>
+
+                <span id="planError" class="error"></span>
+
+
+                <button type="submit">
+                    JOIN FITPASS
+                </button>
+
+                <p id="result" class="success"></p>
+
+            </form>
+
+        </div>
+
+    </div>
+
+</main>
+
+
+
+
+<footer>
+
+    <span>
+        Designed & Developed by
+        <strong>Salim Ansari</strong>
+    </span>
+
+</footer>
+
+
+<script>
+
+
+
+document.getElementById("name").addEventListener("input",function(){
+
+    let value=this.value;
+
+    if(value==="" || /^[A-Za-z ]+$/.test(value)){
+        document.getElementById("nameError").innerHTML="";
+    }
+    else{
+        document.getElementById("nameError").innerHTML=
+        "Only letters allowed.";
+    }
+
+});
+
+
+
+
+document.getElementById("age").addEventListener("blur",function(){
+
+    let age=this.value;
+
+    if(age>=16 && age<=60){
+        document.getElementById("ageError").innerHTML="";
+    }
+    else{
+        document.getElementById("ageError").innerHTML=
+        "Age must be between 16 and 60.";
+    }
+
+});
+
+
+
+
+document.getElementById("email").addEventListener("input",function(){
+
+    let email=this.value;
+
+    let pattern=/^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+    if(email==="" || pattern.test(email)){
+        document.getElementById("emailError").innerHTML="";
+    }
+    else{
+        document.getElementById("emailError").innerHTML=
+        "Invalid email.";
+    }
+
+});
+
+
+
+
+document.getElementById("mobile").addEventListener("input",function(){
+
+    let mobile=this.value;
+
+    if(/^\d{10}$/.test(mobile)){
+        document.getElementById("mobileError").innerHTML="";
+    }
+    else{
+        document.getElementById("mobileError").innerHTML=
+        "Enter 10-digit mobile number.";
+    }
+
+});
+
+
+
+
+document.getElementById("plan").addEventListener("change",function(){
+
+    if(this.value===""){
+        document.getElementById("planError").innerHTML=
+        "Please select a plan.";
+    }
+    else{
+        document.getElementById("planError").innerHTML="";
+    }
+
+});
+
+
+
+
+document.getElementById("gymForm").addEventListener("submit",function(e){
+
+    e.preventDefault();
+
+    let name=document.getElementById("name").value.trim();
+    let age=document.getElementById("age").value;
+    let email=document.getElementById("email").value.trim();
+    let mobile=document.getElementById("mobile").value;
+    let plan=document.getElementById("plan").value;
+
+    let valid=true;
+
+
+    if(!/^[A-Za-z ]+$/.test(name)){
+        document.getElementById("nameError").innerHTML=
+        "Please enter a valid name.";
+        valid=false;
+    }
+
+
+    if(!(age>=16 && age<=60)){
+        document.getElementById("ageError").innerHTML=
+        "Age must be between 16 and 60.";
+        valid=false;
+    }
+
+
+    if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)){
+        document.getElementById("emailError").innerHTML=
+        "Invalid email.";
+        valid=false;
+    }
+
+
+    if(!/^\d{10}$/.test(mobile)){
+        document.getElementById("mobileError").innerHTML=
+        "Enter 10-digit mobile number.";
+        valid=false;
+    }
+
+
+    if(plan===""){
+        document.getElementById("planError").innerHTML=
+        "Please select a plan.";
+        valid=false;
+    }
+
+
+    if(valid){
+
+        document.getElementById("result").innerHTML=
+        "✓ Gym Admission Successful!";
+
+    }
+    else{
+
+        document.getElementById("result").innerHTML="";
+
+    }
+
+});
+
+</script>
+
+</body>
+</html>
