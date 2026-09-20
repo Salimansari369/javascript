@@ -1,0 +1,556 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Theme Preferences</title>
+
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: Inter, Arial, sans-serif;
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 30px;
+      color: #172033;
+      background:
+        radial-gradient(circle at 10% 20%, rgba(99, 102, 241, 0.12), transparent 30%),
+        radial-gradient(circle at 90% 80%, rgba(59, 130, 246, 0.12), transparent 30%),
+        #f8fafc;
+      transition: 0.5s ease;
+    }
+
+    .app {
+      width: 100%;
+      max-width: 680px;
+    }
+
+    .topbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 18px;
+      padding: 0 5px;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 14px;
+      font-weight: 700;
+      color: #334155;
+    }
+
+    .brand-icon {
+      width: 32px;
+      height: 32px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 9px;
+      color: white;
+      background: linear-gradient(135deg, #2563eb, #6366f1);
+    }
+
+    .status {
+      display: flex;
+      align-items: center;
+      gap: 7px;
+      padding: 7px 12px;
+      border-radius: 20px;
+      background: #ecfdf5;
+      color: #047857;
+      font-size: 12px;
+      font-weight: 600;
+    }
+
+    .status-dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: #10b981;
+      box-shadow: 0 0 0 4px rgba(16, 185, 129, 0.12);
+    }
+
+    .card {
+      background: rgba(255, 255, 255, 0.88);
+      backdrop-filter: blur(20px);
+      border: 1px solid #e2e8f0;
+      border-radius: 24px;
+      overflow: hidden;
+      box-shadow:
+        0 20px 50px rgba(15, 23, 42, 0.08),
+        0 2px 8px rgba(15, 23, 42, 0.04);
+    }
+
+    .header {
+      padding: 36px 40px 28px;
+      border-bottom: 1px solid #e8edf3;
+    }
+
+    .title-row {
+      display: flex;
+      align-items: flex-start;
+      gap: 18px;
+    }
+
+    .main-icon {
+      min-width: 58px;
+      height: 58px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 16px;
+      background: #eff6ff;
+      color: #2563eb;
+      font-size: 26px;
+    }
+
+    h1 {
+      font-size: 28px;
+      letter-spacing: -0.7px;
+      margin-bottom: 7px;
+      color: #0f172a;
+    }
+
+    .description {
+      color: #64748b;
+      font-size: 14px;
+      line-height: 1.6;
+    }
+
+    .content {
+      padding: 30px 40px 35px;
+    }
+
+    .section-title {
+      font-size: 13px;
+      font-weight: 700;
+      color: #475569;
+      margin-bottom: 14px;
+      text-transform: uppercase;
+      letter-spacing: 0.7px;
+    }
+
+    .theme-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 14px;
+      margin-bottom: 25px;
+    }
+
+    .theme-card {
+      position: relative;
+      padding: 20px;
+      border: 1.5px solid #e2e8f0;
+      border-radius: 15px;
+      background: #ffffff;
+      cursor: pointer;
+      transition: 0.3s ease;
+    }
+
+    .theme-card:hover {
+      transform: translateY(-3px);
+      border-color: #93c5fd;
+      box-shadow: 0 10px 25px rgba(37, 99, 235, 0.1);
+    }
+
+    .theme-preview {
+      height: 65px;
+      border-radius: 10px;
+      margin-bottom: 15px;
+      padding: 9px;
+      display: flex;
+      gap: 6px;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+    }
+
+    .preview-sidebar {
+      width: 18%;
+      border-radius: 5px;
+      background: #dbeafe;
+    }
+
+    .preview-content {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .preview-line {
+      height: 7px;
+      width: 70%;
+      border-radius: 4px;
+      background: #cbd5e1;
+    }
+
+    .preview-line.small {
+      width: 45%;
+    }
+
+    .dark-preview {
+      background: #111827;
+      border-color: #334155;
+    }
+
+    .dark-preview .preview-sidebar {
+      background: #334155;
+    }
+
+    .dark-preview .preview-line {
+      background: #475569;
+    }
+
+    .theme-name {
+      font-size: 14px;
+      font-weight: 700;
+      color: #1e293b;
+    }
+
+    .theme-info {
+      margin-top: 4px;
+      font-size: 12px;
+      color: #94a3b8;
+    }
+
+    .buttons {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+    }
+
+    button {
+      border: none;
+      padding: 13px 18px;
+      border-radius: 11px;
+      font-size: 14px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: 0.3s ease;
+    }
+
+    .light-btn {
+      color: white;
+      background: #2563eb;
+    }
+
+    .dark-btn {
+      color: white;
+      background: #0f172a;
+    }
+
+    button:hover {
+      transform: translateY(-2px);
+    }
+
+    .light-btn:hover {
+      background: #1d4ed8;
+      box-shadow: 0 8px 20px rgba(37, 99, 235, 0.2);
+    }
+
+    .dark-btn:hover {
+      background: #020617;
+      box-shadow: 0 8px 20px rgba(15, 23, 42, 0.2);
+    }
+
+    .clear-btn {
+      grid-column: 1 / -1;
+      color: #475569;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+    }
+
+    .clear-btn:hover {
+      background: #f1f5f9;
+    }
+
+    .footer {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 18px 40px;
+      border-top: 1px solid #e8edf3;
+      background: #f8fafc;
+    }
+
+    .storage-info {
+      display: flex;
+      gap: 8px;
+    }
+
+    .badge {
+      padding: 6px 9px;
+      border-radius: 7px;
+      background: #e0f2fe;
+      color: #0369a1;
+      font-size: 11px;
+      font-weight: 700;
+    }
+
+    .designer {
+      color: #64748b;
+      font-size: 11px;
+      font-weight: 600;
+      text-align: right;
+    }
+
+    body.dark {
+      color: #e2e8f0;
+      background:
+        radial-gradient(circle at 10% 20%, rgba(99, 102, 241, 0.15), transparent 30%),
+        radial-gradient(circle at 90% 80%, rgba(59, 130, 246, 0.1), transparent 30%),
+        #020617;
+    }
+
+    body.dark .brand {
+      color: #cbd5e1;
+    }
+
+    body.dark .card {
+      background: rgba(15, 23, 42, 0.9);
+      border-color: #1e293b;
+      box-shadow: 0 25px 60px rgba(0, 0, 0, 0.35);
+    }
+
+    body.dark .header,
+    body.dark .footer {
+      border-color: #1e293b;
+    }
+
+    body.dark .footer {
+      background: #0b1220;
+    }
+
+    body.dark .main-icon {
+      background: #172554;
+      color: #60a5fa;
+    }
+
+    body.dark h1 {
+      color: #f8fafc;
+    }
+
+    body.dark .description,
+    body.dark .theme-info {
+      color: #94a3b8;
+    }
+
+    body.dark .section-title {
+      color: #cbd5e1;
+    }
+
+    body.dark .theme-card {
+      background: #111827;
+      border-color: #334155;
+    }
+
+    body.dark .theme-card:hover {
+      border-color: #60a5fa;
+    }
+
+    body.dark .theme-name {
+      color: #f1f5f9;
+    }
+
+    body.dark .clear-btn {
+      color: #cbd5e1;
+      background: #111827;
+      border-color: #334155;
+    }
+
+    body.dark .clear-btn:hover {
+      background: #1e293b;
+    }
+
+    body.dark .designer {
+      color: #94a3b8;
+    }
+
+    body.dark .status {
+      background: #052e16;
+      color: #6ee7b7;
+    }
+
+    @media (max-width: 600px) {
+      body {
+        padding: 15px;
+      }
+
+      .header,
+      .content {
+        padding: 25px 22px;
+      }
+
+      .footer {
+        padding: 16px 22px;
+        flex-direction: column;
+        gap: 12px;
+        align-items: flex-start;
+      }
+
+      h1 {
+        font-size: 24px;
+      }
+
+      .theme-grid,
+      .buttons {
+        grid-template-columns: 1fr;
+      }
+
+      .clear-btn {
+        grid-column: auto;
+      }
+
+      .designer {
+        text-align: left;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="app">
+
+    <div class="topbar">
+      <div class="brand">
+        <div class="brand-icon">⚙</div>
+        Preferences
+      </div>
+
+      <div class="status">
+        <span class="status-dot"></span>
+        Preferences Active
+      </div>
+    </div>
+
+    <div class="card">
+
+      <div class="header">
+        <div class="title-row">
+          <div class="main-icon">🎨</div>
+
+          <div>
+            <h1>Theme Preferences</h1>
+            <p class="description">
+              Customize your interface appearance and save your preferred
+              theme for future sessions.
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <div class="content">
+
+        <div class="section-title">Choose Appearance</div>
+
+        <div class="theme-grid">
+
+          <div class="theme-card" onclick="setTheme('light')">
+            <div class="theme-preview">
+              <div class="preview-sidebar"></div>
+
+              <div class="preview-content">
+                <div class="preview-line"></div>
+                <div class="preview-line small"></div>
+                <div class="preview-line"></div>
+              </div>
+            </div>
+
+            <div class="theme-name">Light Theme</div>
+            <div class="theme-info">Clean and bright interface</div>
+          </div>
+
+          <div class="theme-card" onclick="setTheme('dark')">
+            <div class="theme-preview dark-preview">
+              <div class="preview-sidebar"></div>
+
+              <div class="preview-content">
+                <div class="preview-line"></div>
+                <div class="preview-line small"></div>
+                <div class="preview-line"></div>
+              </div>
+            </div>
+
+            <div class="theme-name">Dark Theme</div>
+            <div class="theme-info">Comfortable low-light interface</div>
+          </div>
+
+        </div>
+
+        <div class="section-title">Actions</div>
+
+        <div class="buttons">
+
+          <button class="light-btn" onclick="setTheme('light')">
+            ☀ Activate Light Theme
+          </button>
+
+          <button class="dark-btn" onclick="setTheme('dark')">
+            ◐ Activate Dark Theme
+          </button>
+
+          <button class="clear-btn" onclick="clearPreference()">
+            ↻ Reset Theme Preference
+          </button>
+
+        </div>
+
+      </div>
+
+      <div class="footer">
+
+        <div class="storage-info">
+          <span class="badge">localStorage</span>
+          <span class="badge">sessionStorage</span>
+        </div>
+
+        <div class="designer">
+          Design by Salim Ansari / 24070521005
+        </div>
+
+      </div>
+
+    </div>
+
+  </div>
+
+  <script>
+    function setTheme(theme) {
+      if (theme === 'dark') {
+        document.body.classList.add('dark');
+      } else {
+        document.body.classList.remove('dark');
+      }
+
+      localStorage.setItem('theme', theme);
+      sessionStorage.setItem('sessionTheme', theme);
+    }
+
+    function clearPreference() {
+      localStorage.removeItem('theme');
+      sessionStorage.removeItem('sessionTheme');
+      document.body.classList.remove('dark');
+    }
+
+    window.onload = function() {
+      var saved = localStorage.getItem('theme');
+
+      if (saved === 'dark') {
+        document.body.classList.add('dark');
+      }
+    };
+  </script>
+
+</body>
+</html>
